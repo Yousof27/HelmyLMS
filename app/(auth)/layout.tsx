@@ -19,7 +19,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       </Link>
       <div className="flex w-full max-w-sm flex-col gap-6">
         <Link href={"/"} className="flex items-center gap-2 self-center font-medium">
-          <Image src={logo} alt="logo" width={32} height={32} className="rounded-md" />
+          <Image src={logo} alt="logo" width={32} height={32} className="rounded-lg" />
           HelmyLMS
         </Link>
         {children}

@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import slugify from "slugify";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import RichTextEditor from "@/components/rich-text-editor/Editor";
 
 const CreateCoursePage = () => {
   // 1. Define your form.
@@ -63,28 +64,30 @@ const CreateCoursePage = () => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel htmlFor={field.name}>Title</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter Ccourse Title..." {...field} />
+                      <Input id={field.name} placeholder="Enter Ccourse Title..." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <div className="flex gap-4 items-end">
                 <FormField
                   control={form.control}
                   name="slug"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Slug</FormLabel>
+                      <FormLabel htmlFor={field.name}>Slug</FormLabel>
                       <FormControl>
-                        <Input placeholder="Slug" {...field} />
+                        <Input id={field.name} placeholder="Slug" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <Button
                   type="button"
                   onClick={() => {
@@ -96,19 +99,21 @@ const CreateCoursePage = () => {
                   Generate slug <SparkleIcon className="ml-1" size={16} />
                 </Button>
               </div>
+
               <FormField
                 control={form.control}
                 name="smallDescription"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Small description</FormLabel>
+                    <FormLabel htmlFor={field.name}>Small description</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Small Description" {...field} className="min-h-[120px]" />
+                      <Textarea id={field.name} placeholder="Small Description" {...field} className="min-h-[120px]" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="description"
@@ -116,20 +121,21 @@ const CreateCoursePage = () => {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Description" {...field} className="min-h-[120px]" />
+                      <RichTextEditor field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="fileKey"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Thumbnail image</FormLabel>
+                    <FormLabel htmlFor={field.name}>Thumbnail image</FormLabel>
                     <FormControl>
-                      <Input placeholder="Thumbnail url" {...field} />
+                      <Input id={field.name} placeholder="Thumbnail url" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -142,10 +148,10 @@ const CreateCoursePage = () => {
                   name="category"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Category</FormLabel>
+                      <FormLabel htmlFor={field.name}>Category</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger id={field.name} className="w-full">
                             <SelectValue placeholder="Select Category" />
                           </SelectTrigger>
                         </FormControl>
@@ -161,15 +167,16 @@ const CreateCoursePage = () => {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="level"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Level</FormLabel>
+                      <FormLabel htmlFor={field.name}>Level</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger id={field.name} className="w-full">
                             <SelectValue placeholder="Select Level" />
                           </SelectTrigger>
                         </FormControl>
@@ -190,9 +197,9 @@ const CreateCoursePage = () => {
                   name="duration"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Duration (hours)</FormLabel>
+                      <FormLabel htmlFor={field.name}>Duration (hours)</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="Duration" {...field} />
+                        <Input id={field.name} type="number" placeholder="Duration" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -203,9 +210,9 @@ const CreateCoursePage = () => {
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Price ($)</FormLabel>
+                      <FormLabel htmlFor={field.name}>Price ($)</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="Price" {...field} />
+                        <Input id={field.name} type="number" placeholder="Price" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -217,10 +224,10 @@ const CreateCoursePage = () => {
                 name="status"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Level</FormLabel>
+                    <FormLabel htmlFor={field.name}>Status</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger id={field.name} className="w-full">
                           <SelectValue placeholder="Select Status" />
                         </SelectTrigger>
                       </FormControl>

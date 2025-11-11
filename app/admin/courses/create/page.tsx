@@ -13,6 +13,7 @@ import slugify from "slugify";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import RichTextEditor from "@/components/rich-text-editor/Editor";
+import Uploader from "@/components/file-uploader/Uploader";
 
 const CreateCoursePage = () => {
   // 1. Define your form.
@@ -135,7 +136,8 @@ const CreateCoursePage = () => {
                   <FormItem>
                     <FormLabel htmlFor={field.name}>Thumbnail image</FormLabel>
                     <FormControl>
-                      <Input id={field.name} placeholder="Thumbnail url" {...field} />
+                      <Uploader />
+                      {/* <Input id={field.name} placeholder="Thumbnail url" {...field} /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>

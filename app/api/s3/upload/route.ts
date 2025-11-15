@@ -16,18 +16,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid Request Body!" }, { status: 400 });
     }
 
-    const { fileName, contentType, size } = validation.data;
+    const { fileName, contentType } = validation.data;
 
     const uniqueKey = `${uuidv4()}-${fileName}`;
 
     const command = new PutObjectCommand({
       Bucket: env.NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES,
       ContentType: contentType,
-      ContentLength: size,
       Key: uniqueKey,
     });
 
-    const preSignedUrl = getSignedUrl(S3, command, { expiresIn: 360 });
+    const preSignedUrl = await getSignedUrl(S3, command, { expiresIn: 360 });
 
     const response = {
       preSignedUrl,

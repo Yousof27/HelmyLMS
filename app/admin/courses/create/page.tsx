@@ -136,8 +136,7 @@ const CreateCoursePage = () => {
                   <FormItem>
                     <FormLabel htmlFor={field.name}>Thumbnail image</FormLabel>
                     <FormControl>
-                      <Uploader />
-                      {/* <Input id={field.name} placeholder="Thumbnail url" {...field} /> */}
+                      <Uploader onChange={field.onChange} value={field.value} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -201,7 +200,17 @@ const CreateCoursePage = () => {
                     <FormItem>
                       <FormLabel htmlFor={field.name}>Duration (hours)</FormLabel>
                       <FormControl>
-                        <Input id={field.name} type="number" placeholder="Duration" {...field} />
+                        <Input
+                          id={field.name}
+                          type="number"
+                          placeholder="0"
+                          {...field}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            const num = value === "" ? 0 : parseFloat(value);
+                            field.onChange(num);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -214,7 +223,17 @@ const CreateCoursePage = () => {
                     <FormItem>
                       <FormLabel htmlFor={field.name}>Price ($)</FormLabel>
                       <FormControl>
-                        <Input id={field.name} type="number" placeholder="Price" {...field} />
+                        <Input
+                          id={field.name}
+                          type="number"
+                          placeholder="0"
+                          {...field}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            const num = value === "" ? 0 : parseFloat(value);
+                            field.onChange(num);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

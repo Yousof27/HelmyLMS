@@ -1,7 +1,6 @@
 import z from "zod";
+import { COURSE_LEVELS, COURSE_STATUSES } from "./enums";
 
-export const CourseLevels = ["Beginner", "Intermediate", "Advanced"];
-export const CourseStatus = ["Drafted", "Published", "Archived"];
 export const courseCategories = [
   "Development",
   "Business",
@@ -24,14 +23,14 @@ export const courseSchema = z.object({
   fileKey: z.string().min(1, { error: "File is required" }),
   price: z.number().min(1, { error: "Price must be positive number" }),
   duration: z.number().min(1, { error: "Duration must be at least 1 hour" }).max(500, { error: "Duration must be at most 500 hour" }),
-  level: z.enum(CourseLevels, { error: "Level is required" }),
+  level: z.enum(COURSE_LEVELS, { error: "Level is required" }),
   category: z.enum(courseCategories, { error: "Category is required" }),
   smallDescription: z
     .string()
     .min(3, { error: "Small Description must be at least 3 characters long" })
     .max(200, { error: "Small Description must be at most 200 characters long" }),
   slug: z.string().min(3, { error: "Slug must be at least 3 characters" }),
-  status: z.enum(CourseStatus, { error: "Status is required" }),
+  status: z.enum(COURSE_STATUSES, { error: "Status is required" }),
 });
 
 export type courseSchemaType = z.infer<typeof courseSchema>;

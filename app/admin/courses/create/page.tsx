@@ -2,8 +2,8 @@
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { courseCategories, CourseLevels, courseSchema, courseSchemaType, CourseStatus } from "@/lib/zodSchemas";
-import { ArrowLeft, PlusIcon, SparkleIcon } from "lucide-react";
+import { courseCategories, courseSchema, courseSchemaType } from "@/lib/zodSchemas";
+import { ArrowLeft, Loader2, PlusIcon, SparkleIcon } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,9 +14,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import RichTextEditor from "@/components/rich-text-editor/Editor";
 import Uploader from "@/components/file-uploader/Uploader";
+import { COURSE_LEVELS, COURSE_STATUSES } from "@/lib/enums";
+import { tryCatch } from "@/hooks/use-tryCatch";
+import { CreateCourseAction } from "./actions";
+import { toast } from "sonner";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 const CreateCoursePage = () => {
-  // 1. Define your form.
+  const [pending, startTransition] = useTransition();
+  const router = useRouter();
+
   const form = useForm<courseSchemaType>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
@@ -25,17 +33,33 @@ const CreateCoursePage = () => {
       fileKey: "",
       price: 0,
       duration: 0,
-      level: "",
+      level: undefined,
       category: "",
-      status: "",
+      status: undefined,
       slug: "",
       smallDescription: "",
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: courseSchemaType) {
-    console.log(values);
+    startTransition(async () => {
+      console.log(values);
+      const { data: result, error } = await tryCatch(CreateCourseAction(values));
+
+      if (error) {
+        toast.error("Faild to create the course. Please try again");
+        return;
+      }
+
+      if (result.statusText === "error") {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success(result.message);
+      form.reset();
+      router.push("/admin/courses");
+    });
   }
 
   return (
@@ -182,7 +206,7 @@ const CreateCoursePage = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {CourseLevels.map((level) => (
+                          {COURSE_LEVELS.map((level) => (
                             <SelectItem key={level} value={level}>
                               {level}
                             </SelectItem>
@@ -253,7 +277,7 @@ const CreateCoursePage = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {CourseStatus.map((status) => (
+                        {COURSE_STATUSES.map((status) => (
                           <SelectItem key={status} value={status}>
                             {status}
                           </SelectItem>
@@ -264,8 +288,16 @@ const CreateCoursePage = () => {
                   </FormItem>
                 )}
               />
-              <Button>
-                Create Course <PlusIcon className="ml-1 size-5" />
+              <Button type="submit" disabled={pending}>
+                {pending ? (
+                  <>
+                    Creating... <Loader2 className="ml-1 animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    Create Course <PlusIcon className="ml-1 size-5" />
+                  </>
+                )}
               </Button>
             </form>
           </Form>

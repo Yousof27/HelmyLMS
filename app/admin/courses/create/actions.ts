@@ -1,17 +1,42 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { requireAdmin } from "@/app/data/admin/require-admin";
+import arcjet, { detectBot, fixedWindow } from "@/lib/arcjet";
 import { prisma } from "@/lib/db";
 import { actionResponse } from "@/lib/types";
 import { courseSchema, courseSchemaType } from "@/lib/zodSchemas";
-import { headers } from "next/headers";
+import { request } from "@arcjet/next";
+
+const aj = arcjet
+  .withRule(
+    detectBot({
+      mode: "LIVE",
+      allow: [],
+    })
+  )
+  .withRule(
+    fixedWindow({
+      mode: "LIVE",
+      window: "1m",
+      max: 5,
+    })
+  );
 
 export async function CreateCourseAction(data: courseSchemaType): Promise<actionResponse> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await requireAdmin();
 
   try {
+    const req = await request();
+
+    const desicion = await aj.protect(req, { fingerprint: session.user.id });
+
+    if (desicion.isDenied()) {
+      return {
+        statusText: "error",
+        error: "Access Denied, Too many requests !",
+      };
+    }
+
     const validation = courseSchema.safeParse(data);
     if (!validation.success) {
       return {

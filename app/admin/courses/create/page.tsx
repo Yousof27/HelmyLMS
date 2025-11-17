@@ -79,8 +79,9 @@ const CreateCoursePage = () => {
       <Card>
         <CardHeader>
           <CardTitle>Basic Information</CardTitle>
-          <CardDescription>Provide basic information about the course</CardDescription>
+          <CardDescription>Provide basic information about the course.</CardDescription>
         </CardHeader>
+
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

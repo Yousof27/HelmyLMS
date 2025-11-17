@@ -36,6 +36,21 @@ const Uploader = ({ onChange, value }: UploaderProps) => {
     key: value,
   });
 
+  const resetFileState = () => {
+    setFileState({
+      id: null,
+      file: null,
+      uploading: false,
+      progress: 0,
+      isDeleting: false,
+      error: false,
+      fileType: "image",
+      objectUrl: undefined,
+    });
+  };
+
+  const reTryHandler = () => resetFileState();
+
   const uploadAndDeleteErrorHandler = (message: string) => {
     toast.error(message);
     setFileState((prev) => ({
@@ -72,16 +87,7 @@ const Uploader = ({ onChange, value }: UploaderProps) => {
 
       onChange?.("");
 
-      setFileState({
-        id: null,
-        file: null,
-        uploading: false,
-        progress: 0,
-        isDeleting: false,
-        error: false,
-        fileType: "image",
-        objectUrl: undefined,
-      });
+      resetFileState();
 
       toast.success("File deleted successfully");
     } catch (error) {
@@ -228,7 +234,7 @@ const Uploader = ({ onChange, value }: UploaderProps) => {
 
   const renderContent = () => {
     if (fileState.uploading) return <RenderUploadingState progress={fileState.progress} file={fileState.file as File} />;
-    else if (fileState.error) return <RenderErrorState />;
+    else if (fileState.error) return <RenderErrorState reTryHandler={reTryHandler} />;
     else if (fileState.objectUrl)
       return <RenderUploadedState previewUrl={fileState.objectUrl} isDeleting={fileState.isDeleting} removeFileHandler={removeFileHandler} />;
     return <RenderEmptyState isDragActive={isDragActive} />;

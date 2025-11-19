@@ -22,7 +22,7 @@ const aj = arcjet
     })
   );
 
-export async function CreateCourseAction(data: courseSchemaType): Promise<actionResponse> {
+export async function createCourseAction(data: courseSchemaType): Promise<actionResponse> {
   const session = await requireAdmin();
 
   try {
@@ -57,7 +57,7 @@ export async function CreateCourseAction(data: courseSchemaType): Promise<action
       message: "Course Created Successfully",
     };
   } catch (error) {
-    console.log("error");
+    console.log("Create Course Error:", error);
     return {
       statusText: "error",
       error: `Create Course Error: ${error}`,

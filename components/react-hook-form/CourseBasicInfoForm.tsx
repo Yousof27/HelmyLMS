@@ -1,0 +1,146 @@
+"use client";
+
+import { createCourseAction } from "@/app/admin/courses/create/actions";
+import { tryCatch } from "@/hooks/use-tryCatch";
+import { courseCategories, courseSchema, courseSchemaType } from "@/lib/zodSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { Form } from "../ui/form";
+import FormInput from "./FormInput";
+import { Button } from "../ui/button";
+import slugify from "slugify";
+import { Loader2, Pencil, PlusIcon, SparkleIcon } from "lucide-react";
+import FormTextArea from "./FormTextArea";
+import CustomFormField from "./CustomFormField";
+import Uploader from "../file-uploader/Uploader";
+import FormSelect from "./FormSelect";
+import RichTextEditor from "../rich-text-editor/Editor";
+import { COURSE_LEVELS, COURSE_STATUSES } from "@/lib/enums";
+import { AdminSingleCourseType } from "@/app/data/admin/admin-get-course";
+import { editCourseAction } from "@/app/admin/courses/[courseId]/edit/action";
+
+interface CourseBasicInfoFormProps {
+  data?: AdminSingleCourseType;
+  usage?: "create" | "edit";
+  courseId?: string;
+}
+
+const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicInfoFormProps) => {
+  const [pending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const form = useForm<courseSchemaType>({
+    resolver: zodResolver(courseSchema),
+    defaultValues: {
+      title: usage === "edit" ? data?.title : "",
+      description: usage === "edit" ? data?.description : "",
+      fileKey: usage === "edit" ? data?.fileKey : "",
+      price: usage === "edit" ? data?.price : 0,
+      duration: usage === "edit" ? data?.duration : 0,
+      level: usage === "edit" ? data?.level : undefined,
+      category: usage === "edit" ? data?.category : "",
+      status: usage === "edit" ? data?.status : undefined,
+      slug: usage === "edit" ? data?.slug : "",
+      smallDescription: usage === "edit" ? data?.smallDescription : "",
+    },
+  });
+
+  function onSubmit(values: courseSchemaType) {
+    startTransition(async () => {
+      const { data: result, error } =
+        usage === "create" ? await tryCatch(createCourseAction(values)) : await tryCatch(editCourseAction(values, courseId as string));
+
+      if (error) {
+        toast.error(`Faild to ${usage} the course. Please try again`);
+        return;
+      }
+
+      if (result.statusText === "error") {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success(result.message);
+      form.reset();
+      router.push("/admin/courses");
+    });
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormInput form={form} name="title" label="Title" placeholder="Enter course title..." />
+
+        <div className="flex gap-4 items-end">
+          <FormInput form={form} name="slug" label="Slug" placeholder="Slug" FormItemCSS="w-full" />
+
+          <Button
+            type="button"
+            onClick={() => {
+              const title = form.getValues("title");
+              const slug = slugify(title);
+              form.setValue("slug", slug, { shouldValidate: true });
+            }}
+          >
+            Generate slug <SparkleIcon className="ml-1" size={16} />
+          </Button>
+        </div>
+
+        <FormTextArea form={form} name="smallDescription" label="Small Description" placeholder="Small Description" textareaCSS="min-h-[120px]" />
+
+        <CustomFormField form={form} name="description" label="Description" children={(field) => <RichTextEditor field={field} />} />
+
+        <CustomFormField
+          form={form}
+          name="fileKey"
+          label="Thumbnail Image"
+          children={(field) => <Uploader onChange={field.onChange} value={field.value} />}
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormSelect
+            form={form}
+            name="category"
+            label="Category"
+            placeholder="Select Category"
+            selectTriggerCSS="w-full"
+            selectContent={courseCategories}
+          />
+
+          <FormSelect form={form} name="level" label="Level" placeholder="Select Level" selectTriggerCSS="w-full" selectContent={COURSE_LEVELS} />
+
+          <FormInput form={form} name="duration" label="Duration (hours)" type="number" placeholder="0" />
+
+          <FormInput form={form} name="price" label="Price ($)" type="number" placeholder="0" />
+        </div>
+
+        <FormSelect form={form} name="status" label="Status" placeholder="Select Status" selectTriggerCSS="w-full" selectContent={COURSE_STATUSES} />
+
+        <Button type="submit" disabled={pending}>
+          {pending ? (
+            <>
+              {usage === "create" ? "Creating" : "Editing"}... <Loader2 className="ml-1 animate-spin" />
+            </>
+          ) : (
+            <>
+              {usage === "create" ? (
+                <>
+                  Create Course <PlusIcon className="ml-1 size-5" />
+                </>
+              ) : (
+                <>
+                  Edit Course <Pencil className="ml-1" />
+                </>
+              )}
+            </>
+          )}
+        </Button>
+      </form>
+    </Form>
+  );
+};
+
+export default CourseBasicInfoForm;

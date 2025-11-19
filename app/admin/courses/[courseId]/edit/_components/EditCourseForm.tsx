@@ -1,9 +1,9 @@
-"use client";
+import CourseBasicInfoForm from "@/components/react-hook-form/CourseBasicInfoForm";
+
+
 
 const EditCourseForm = () => {
-  return (
-    <div>Edit Course Form</div>
-  )
-}
+  return <CourseBasicInfoForm  />;
+};
 
-export default EditCourseForm
+export default EditCourseForm;

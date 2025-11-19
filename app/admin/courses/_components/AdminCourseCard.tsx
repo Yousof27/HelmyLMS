@@ -1,4 +1,4 @@
-import { AdminCourseType } from "@/app/data/admin/admin-get-courses";
+import { AdminCoursesType } from "@/app/data/admin/admin-get-courses";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -8,12 +8,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface AdminCourseCardProps {
-  data: AdminCourseType;
+  data: AdminCoursesType;
 }
 
 const AdminCourseCard = ({ data }: AdminCourseCardProps) => {
   const thumbnailUrl = useConstructUrl(data.fileKey);
-  console.log(thumbnailUrl);
   return (
     <Card className="group relative py-0 gap-0">
       <div className="absolute top-2 right-2 z-10">

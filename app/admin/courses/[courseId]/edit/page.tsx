@@ -1,8 +1,8 @@
 import { adminGetCourse } from "@/app/data/admin/admin-get-course";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import EditCourseForm from "./_components/EditCourseForm";
 import CourseBasicInfoForm from "@/components/react-hook-form/CourseBasicInfoForm";
+import CourseStructure from "./_components/CourseStructure";
 
 type Params = {
   params: Promise<{ courseId: string }>;
@@ -24,6 +24,7 @@ const EditCourse = async ({ params }: Params) => {
           <TabsTrigger value="basic-info">Basic Info</TabsTrigger>
           <TabsTrigger value="course-structure">Course Structure</TabsTrigger>
         </TabsList>
+
         <TabsContent value="basic-info">
           <Card>
             <CardHeader>
@@ -35,8 +36,17 @@ const EditCourse = async ({ params }: Params) => {
             </CardContent>
           </Card>
         </TabsContent>
+
         <TabsContent value="course-structure">
-          <div>Course Structure Content</div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Course Structure</CardTitle>
+              <CardDescription>Here you can update course structure.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CourseStructure />
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

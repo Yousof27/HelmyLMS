@@ -35,23 +35,22 @@ const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicIn
   const form = useForm<courseSchemaType>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
-      title: usage === "edit" ? data?.title : "",
-      description: usage === "edit" ? data?.description : "",
-      fileKey: usage === "edit" ? data?.fileKey : "",
-      price: usage === "edit" ? data?.price : 0,
-      duration: usage === "edit" ? data?.duration : 0,
-      level: usage === "edit" ? data?.level : undefined,
-      category: usage === "edit" ? data?.category : "",
-      status: usage === "edit" ? data?.status : undefined,
-      slug: usage === "edit" ? data?.slug : "",
-      smallDescription: usage === "edit" ? data?.smallDescription : "",
+      title: data?.title ?? "",
+      description: data?.description ?? "",
+      fileKey: data?.fileKey ?? "",
+      price: data?.price ?? 0,
+      duration: data?.duration ?? 0,
+      level: data?.level ?? undefined,
+      category: data?.category ?? "",
+      status: data?.status ?? undefined,
+      slug: data?.slug ?? "",
+      smallDescription: data?.smallDescription ?? "",
     },
   });
 
   function onSubmit(values: courseSchemaType) {
     startTransition(async () => {
-      const { data: result, error } =
-        usage === "create" ? await tryCatch(createCourseAction(values)) : await tryCatch(editCourseAction(values, courseId as string));
+      const { data: result, error } = await tryCatch(usage === "create" ? createCourseAction(values) : editCourseAction(values, courseId!));
 
       if (error) {
         toast.error(`Faild to ${usage} the course. Please try again`);
@@ -75,7 +74,7 @@ const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicIn
         <FormInput form={form} name="title" label="Title" placeholder="Enter course title..." />
 
         <div className="flex gap-4 items-end">
-          <FormInput form={form} name="slug" label="Slug" placeholder="Slug" FormItemCSS="w-full" />
+          <FormInput form={form} name="slug" label="Slug" placeholder="auto-generate-slug" FormItemCSS="w-full" />
 
           <Button
             type="button"

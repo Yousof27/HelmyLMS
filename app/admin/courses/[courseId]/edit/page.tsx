@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CourseBasicInfoForm from "@/components/react-hook-form/CourseBasicInfoForm";
 import CourseStructure from "./_components/CourseStructure";
+import { prisma } from "@/lib/db";
 
 type Params = {
   params: Promise<{ courseId: string }>;
@@ -10,6 +11,24 @@ type Params = {
 
 const EditCourse = async ({ params }: Params) => {
   const { courseId } = await params;
+
+  // const chapter = await prisma.chapter.create({
+  //   data: {
+  //     title: "Chapter No.2",
+  //     position: 1,
+  //     courseId: courseId,
+  //   },
+  // });
+
+  // const data = [
+  //   { position: 1, title: "Lesson No.1", chapterId: chapter.id },
+  //   { position: 2, title: "Lesson No.2", chapterId: chapter.id },
+  //   { position: 3, title: "Lesson No.3", chapterId: chapter.id },
+  // ];
+
+  // const lesson = await prisma.lesson.createMany({
+  //   data: data,
+  // });
 
   const course = await adminGetCourse(courseId);
 
@@ -44,7 +63,7 @@ const EditCourse = async ({ params }: Params) => {
               <CardDescription>Here you can update course structure.</CardDescription>
             </CardHeader>
             <CardContent>
-              <CourseStructure />
+              <CourseStructure course={course} />
             </CardContent>
           </Card>
         </TabsContent>

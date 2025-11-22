@@ -20,7 +20,7 @@ import FormSelect from "./FormSelect";
 import RichTextEditor from "../rich-text-editor/Editor";
 import { COURSE_LEVELS, COURSE_STATUSES } from "@/lib/enums";
 import { AdminSingleCourseType } from "@/app/data/admin/admin-get-course";
-import { editCourseAction } from "@/app/admin/courses/[courseId]/edit/action";
+import { editCourseAction } from "@/app/admin/courses/[courseId]/edit/actions";
 
 interface CourseBasicInfoFormProps {
   data?: AdminSingleCourseType;

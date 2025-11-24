@@ -59,12 +59,11 @@ const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicIn
 
       if (result.statusText === "error") {
         toast.error(result.error);
-        return;
+      } else if (result.statusText === "success") {
+        toast.success(result.message);
+        form.reset();
+        router.push("/admin/courses");
       }
-
-      toast.success(result.message);
-      form.reset();
-      router.push("/admin/courses");
     });
   }
 

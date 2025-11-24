@@ -41,3 +41,10 @@ export const fileUploadSchema = z.object({
   size: z.number().min(1, { error: "Size is required" }),
   isImage: z.boolean(),
 });
+
+export const chapterSchema = z.object({
+  name: z.string().min(3, { error: "Chapter name must be at least 3 characters long" }),
+  courseId: z.string(),
+});
+
+export type chapterSchemaType = z.infer<typeof chapterSchema>;

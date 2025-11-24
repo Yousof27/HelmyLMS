@@ -7,12 +7,13 @@ import { ReactNode, useEffect, useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { AdminSingleCourseType } from "@/app/data/admin/admin-get-course";
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronRight, FileText, GripVertical, Trash2 } from "lucide-react";
+import { ChevronRight, FileText, GripVertical, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CollapsibleContent } from "@radix-ui/react-collapsible";
 import Link from "next/link";
 import { toast } from "sonner";
 import { reorderChaptersAction, reorderLessonsAction } from "../actions";
+import NewChapterModal from "./NewChapterModal";
 
 interface CourseStructureProps {
   course: AdminSingleCourseType;
@@ -174,6 +175,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between border-b border-border">
           <CardTitle>Chapters</CardTitle>
+          <NewChapterModal courseId={course.id} />
         </CardHeader>
 
         <CardContent className="space-y-6">
@@ -223,7 +225,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
                           </SortableContext>
                           <div className="p-2">
                             <Button variant="outline" className="w-full">
-                              Create New Lesson
+                              <Plus className="size-4" /> New Lesson
                             </Button>
                           </div>
                         </div>

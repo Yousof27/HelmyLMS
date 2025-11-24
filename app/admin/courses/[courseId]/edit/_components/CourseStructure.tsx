@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { reorderChaptersAction, reorderLessonsAction } from "../actions";
 import NewChapterModal from "./NewChapterModal";
 import NewLessonModal from "./NewLessonModal";
+import DeleteLessonModal from "./DeleteLessonModal";
 
 interface CourseStructureProps {
   course: AdminSingleCourseType;
@@ -216,16 +217,14 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
                                       <FileText className="size-4" />
                                       <Link href={`/admin/courses/${course.id}/${chapter.id}/${lesson.id}`}>{lesson.title}</Link>
                                     </div>
-                                    <Button size="icon" variant="ghost" className="hover:text-destructive!">
-                                      <Trash2 />
-                                    </Button>
+                                    <DeleteLessonModal courseId={course.id} chapterId={chapter.id} lessonId={lesson.id} />
                                   </div>
                                 )}
                               </SortableItem>
                             ))}
                           </SortableContext>
                           <div className="p-2">
-                            <NewLessonModal courseId={course.id} chapterId={chapter.id}  />
+                            <NewLessonModal courseId={course.id} chapterId={chapter.id} />
                           </div>
                         </div>
                       </CollapsibleContent>

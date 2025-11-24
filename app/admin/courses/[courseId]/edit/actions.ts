@@ -243,3 +243,52 @@ export async function createNewLessonAction({ name, courseId, chapterId }: Creat
     };
   }
 }
+
+interface deleteLessonActionProps {
+  lessonId: string;
+  chapterId: string;
+  courseId: string;
+}
+
+export async function deleteLessonAction({ lessonId, chapterId, courseId }: deleteLessonActionProps): Promise<actionResponse> {
+  await requireAdmin();
+  try {
+    const lessons = await prisma.lesson.findMany({
+      where: { chapterId: chapterId },
+      orderBy: { position: "asc" },
+    });
+
+    if (!lessons || lessons.length === 0) {
+      return {
+        statusText: "error",
+        error: `No lessons exists !`,
+      };
+    }
+
+    const newLessons = lessons.filter((lesson) => lesson.id !== lessonId);
+
+    const updates = newLessons.map((lesson, index) => {
+      return prisma.lesson.update({
+        where: { id: lesson.id },
+        data: {
+          position: index + 1,
+        },
+      });
+    });
+
+    await prisma.$transaction([...updates, prisma.lesson.delete({ where: { id: lessonId, chapterId: chapterId } })]);
+
+    revalidatePath(`/admin/courses/${courseId}/edit`);
+
+    return {
+      statusText: "success",
+      message: `Lesson Deleted Successfully`,
+    };
+  } catch (error) {
+    console.log("Delete Lesson Error:", error);
+    return {
+      statusText: "error",
+      error: `Delete Lesson Error: ${error}`,
+    };
+  }
+}

@@ -66,7 +66,7 @@ const NewLessonModal = ({ courseId, chapterId }: { courseId: string; chapterId: 
 
             <DialogFooter>
               <Button type="submit" disabled={pending}>
-                {pending ? <Loader2 className="size-4" /> : "Save"}
+                {pending ? <Loader2 className="size-4 animate-spin" /> : "Save"}
               </Button>
             </DialogFooter>
           </form>

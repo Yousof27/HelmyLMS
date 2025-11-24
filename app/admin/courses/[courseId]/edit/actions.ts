@@ -4,7 +4,7 @@ import { requireAdmin } from "@/app/data/admin/require-admin";
 import arcjet, { detectBot, fixedWindow } from "@/lib/arcjet";
 import { prisma } from "@/lib/db";
 import { actionResponse } from "@/lib/types";
-import { chapterSchema, courseSchema, courseSchemaType } from "@/lib/zodSchemas";
+import { chapterSchema, courseSchema, courseSchemaType, lessonSchema } from "@/lib/zodSchemas";
 import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 
@@ -184,10 +184,62 @@ export async function createNewChapterAction({ name, courseId }: CreateNewChapte
       message: `Chapter Created Successfully`,
     };
   } catch (error) {
-    console.log("Reorder Chapters Error:", error);
+    console.log("Create Chapter Error:", error);
     return {
       statusText: "error",
-      error: `Reorder Chapters Error: ${error}`,
+      error: `Create Chapter Error: ${error}`,
+    };
+  }
+}
+
+interface CreateNewLessonProps {
+  name: string;
+  courseId: string;
+  chapterId: string;
+}
+
+export async function createNewLessonAction({ name, courseId, chapterId }: CreateNewLessonProps): Promise<actionResponse> {
+  await requireAdmin();
+  try {
+    const validation = lessonSchema.safeParse({ name, courseId, chapterId });
+
+    if (!validation.success) {
+      return {
+        statusText: "error",
+        error: "Invalid Data :(",
+      };
+    }
+
+    await prisma.$transaction(async (tx) => {
+      const maxPosition = await tx.lesson.findFirst({
+        where: { chapterId: chapterId },
+        select: { position: true },
+        orderBy: { position: "desc" },
+      });
+
+      await tx.lesson.create({
+        data: {
+          title: name,
+          description: validation.data.description,
+          videoKey: validation.data.videoKey,
+          thumbnailKey: validation.data.thumbnailKey,
+          chapterId: chapterId,
+          position: (maxPosition?.position ?? 0) + 1,
+        },
+      });
+    });
+
+    revalidatePath(`/admin/courses/${courseId}/edit`);
+
+    return {
+      statusText: "success",
+      message: `Lesson Created Successfully`,
+    };
+  } catch (error) {
+    console.log("Create Lesson Error:", error);
+    return {
+      statusText: "error",
+      error: `Create Lesson Error: ${error}`,
     };
   }
 }

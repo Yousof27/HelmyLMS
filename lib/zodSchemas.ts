@@ -43,8 +43,19 @@ export const fileUploadSchema = z.object({
 });
 
 export const chapterSchema = z.object({
-  name: z.string().min(3, { error: "Chapter name must be at least 3 characters long" }),
+  name: z.string().min(3, { error: "Name must be at least 3 characters long" }),
   courseId: z.string(),
 });
 
 export type chapterSchemaType = z.infer<typeof chapterSchema>;
+
+export const lessonSchema = z.object({
+  name: z.string().min(3, { error: "Name must be at least 3 characters long" }),
+  courseId: z.string(),
+  chapterId: z.string(),
+  description: z.string().min(3, { error: "Description must be at least 3 characters long" }).optional(),
+  thumbnailKey: z.string().optional(),
+  videoKey: z.string().optional(),
+});
+
+export type lessonSchemaType = z.infer<typeof lessonSchema>;

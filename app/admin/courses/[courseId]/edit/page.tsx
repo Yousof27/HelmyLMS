@@ -3,7 +3,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CourseBasicInfoForm from "@/components/react-hook-form/CourseBasicInfoForm";
 import CourseStructure from "./_components/CourseStructure";
-import { prisma } from "@/lib/db";
 
 type Params = {
   params: Promise<{ courseId: string }>;

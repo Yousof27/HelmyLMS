@@ -72,6 +72,7 @@ interface ReorderLessonsActionProps {
 }
 
 export async function reorderLessonsAction({ chapterId, courseId, lessons }: ReorderLessonsActionProps): Promise<actionResponse> {
+  await requireAdmin();
   try {
     if (!lessons || lessons.length === 0) {
       return {
@@ -98,10 +99,51 @@ export async function reorderLessonsAction({ chapterId, courseId, lessons }: Reo
       message: `Lessons Reordered Successfully`,
     };
   } catch (error) {
-    console.log("Edit Course Error:", error);
+    console.log("Reorder Lessons Error:", error);
     return {
       statusText: "error",
-      error: `Edit Course Error: ${error}`,
+      error: `Reorder Lessons Error: ${error}`,
+    };
+  }
+}
+
+interface ReorderChaptersActionProps {
+  courseId: string;
+  chapters: { id: string; position: number }[];
+}
+
+export async function reorderChaptersAction({ courseId, chapters }: ReorderChaptersActionProps): Promise<actionResponse> {
+  await requireAdmin();
+  try {
+    if (!chapters || chapters.length === 0) {
+      return {
+        statusText: "error",
+        error: "No chapters to reordering",
+      };
+    }
+
+    const updates = chapters.map((chapter) =>
+      prisma.chapter.update({
+        where: { id: chapter.id, courseId: courseId },
+        data: {
+          position: chapter.position,
+        },
+      })
+    );
+
+    await prisma.$transaction(updates);
+
+    revalidatePath(`/admin/courses/${courseId}/edit`);
+
+    return {
+      statusText: "success",
+      message: `Chapters Reordered Successfully`,
+    };
+  } catch (error) {
+    console.log("Reorder Chapters Error:", error);
+    return {
+      statusText: "error",
+      error: `Reorder Chapters Error: ${error}`,
     };
   }
 }

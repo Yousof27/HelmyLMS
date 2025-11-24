@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DndContext, DraggableSyntheticListeners, KeyboardSensor, PointerSensor, rectIntersection, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { AdminSingleCourseType } from "@/app/data/admin/admin-get-course";
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { CollapsibleContent } from "@radix-ui/react-collapsible";
 import Link from "next/link";
 import { toast } from "sonner";
+import { reorderChaptersAction, reorderLessonsAction } from "../actions";
 
 interface CourseStructureProps {
   course: AdminSingleCourseType;
@@ -20,7 +21,6 @@ interface CourseStructureProps {
 interface SortableItemProps {
   id: string;
   children: (listeners: DraggableSyntheticListeners) => ReactNode;
-  className?: string;
   data?: {
     type: "chapter" | "lesson";
     chapterId?: string;
@@ -42,6 +42,24 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
     })) || [];
 
   const [items, setItems] = useState(initialItems);
+
+  useEffect(() => {
+    setItems((prevItems) => {
+      const updatedItems =
+        course.chapters.map((chapter) => ({
+          id: chapter.id,
+          title: chapter.title,
+          order: chapter.position,
+          isOpen: prevItems.find((item) => item.id === chapter.id)?.isOpen || true,
+          lessons: chapter.lessons.map((lesson) => ({
+            id: lesson.id,
+            title: lesson.title,
+            order: lesson.position,
+          })),
+        })) || [];
+      return updatedItems;
+    });
+  }, [course]);
 
   function returnErrorToast(message: string) {
     toast.error(message);
@@ -74,9 +92,22 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
       const previousChapters = [...items];
 
       setItems(updatedChaptersOrder);
-    }
 
-    if (activeType === "lesson" && overType === "lesson") {
+      const newChaptersActionData = updatedChaptersOrder.map((chapter) => ({ id: chapter.id, position: chapter.order }));
+
+      const reorderChaptersPrisma = () => reorderChaptersAction({ courseId: course.id, chapters: newChaptersActionData });
+
+      toast.promise(reorderChaptersPrisma(), {
+        success: (result) => {
+          if (result.statusText === "success") return result.message;
+          return result.error;
+        },
+        error: () => {
+          setItems(previousChapters);
+          return "Failed to reorder chapters :(";
+        },
+      });
+    } else if (activeType === "lesson" && overType === "lesson") {
       const chapterId = active.data.current?.chapterId;
 
       if (!chapterId) return;
@@ -110,10 +141,20 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
 
       setItems(newChaptersState);
 
-      const newLessonsActionData = newLessons.map((lesson) => ({
-        id: lesson.id,
-        position: lesson.order,
-      }));
+      const newLessonsActionData = newLessons.map((lesson) => ({ id: lesson.id, position: lesson.order }));
+
+      const reorderLessonsPromise = () => reorderLessonsAction({ chapterId, courseId: course.id, lessons: newLessonsActionData });
+
+      toast.promise(reorderLessonsPromise(), {
+        success: (result) => {
+          if (result.statusText === "success") return result.message;
+          return result.error;
+        },
+        error: () => {
+          setItems(previousChapters);
+          return "Failed to reorder lessons :(";
+        },
+      });
     }
   }
 
@@ -201,7 +242,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
 
 export default CourseStructure;
 
-function SortableItem({ children, id, className, data }: SortableItemProps) {
+function SortableItem({ children, id, data }: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: id, data: data });
 
   const style = {
@@ -210,8 +251,10 @@ function SortableItem({ children, id, className, data }: SortableItemProps) {
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} className={`touch-none ${className} ${isDragging ? "z-10" : ""}`}>
+    <div ref={setNodeRef} style={style} {...attributes} className={`touch-none ${isDragging ? "z-10" : ""}`}>
       {children(listeners)}
     </div>
   );
 }
+
+// Edit Course Error: PrismaClientKnownRequestError: Invalid `lessons.map((lesson)=>__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].lesson.update()` invocation in D:\Web\1- Front End\4- Next JS\lms-project\.next\dev\server\chunks\ssr\[root-of-the-server]__6588717a._.js:649:170 646 error: "No lessons to reordering" 647 }; 648 } → 649 const updates = lessons.map((lesson)=>__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].lesson.update(

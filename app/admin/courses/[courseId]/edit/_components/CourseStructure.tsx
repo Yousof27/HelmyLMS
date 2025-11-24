@@ -16,6 +16,7 @@ import { reorderChaptersAction, reorderLessonsAction } from "../actions";
 import NewChapterModal from "./NewChapterModal";
 import NewLessonModal from "./NewLessonModal";
 import DeleteLessonModal from "./DeleteLessonModal";
+import DeleteChapterModal from "./DeleteChapterModal";
 
 interface CourseStructureProps {
   course: AdminSingleCourseType;
@@ -199,9 +200,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
                             </Button>
                           </CollapsibleTrigger>
                         </div>
-                        <Button size="icon" variant="ghost" className="hover:text-destructive!">
-                          <Trash2 />
-                        </Button>
+                        <DeleteChapterModal courseId={course.id} chapterId={chapter.id} />
                       </div>
                       <CollapsibleContent>
                         <div className="p-1">

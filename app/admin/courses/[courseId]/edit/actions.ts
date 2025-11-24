@@ -292,3 +292,51 @@ export async function deleteLessonAction({ lessonId, chapterId, courseId }: dele
     };
   }
 }
+
+interface deleteChapterActionProps {
+  chapterId: string;
+  courseId: string;
+}
+
+export async function deleteChapterAction({ chapterId, courseId }: deleteChapterActionProps): Promise<actionResponse> {
+  await requireAdmin();
+  try {
+    const chapters = await prisma.chapter.findMany({
+      where: { courseId: courseId },
+      orderBy: { position: "asc" },
+    });
+
+    if (!chapters || chapters.length === 0) {
+      return {
+        statusText: "error",
+        error: `No chapters exists !`,
+      };
+    }
+
+    const newChapters = chapters.filter((chapter) => chapter.id !== chapterId);
+
+    const updates = newChapters.map((chapter, index) => {
+      return prisma.chapter.update({
+        where: { id: chapter.id },
+        data: {
+          position: index + 1,
+        },
+      });
+    });
+
+    await prisma.$transaction([...updates, prisma.chapter.delete({ where: { id: chapterId, courseId: courseId } })]);
+
+    revalidatePath(`/admin/courses/${courseId}/edit`);
+
+    return {
+      statusText: "success",
+      message: `Chapter Deleted Successfully`,
+    };
+  } catch (error) {
+    console.log("Delete Chapter Error:", error);
+    return {
+      statusText: "error",
+      error: `Delete Chapter Error: ${error}`,
+    };
+  }
+}

@@ -6,6 +6,7 @@ import useConstructUrl from "@/hooks/use-construct-url";
 import { ArrowRight, Eye, MoreVertical, Pencil, School, TimerIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import DeleteCourseModal from "./DeleteCourseModal";
 
 interface AdminCourseCardProps {
   data: AdminCoursesType;
@@ -37,10 +38,7 @@ const AdminCourseCard = ({ data }: AdminCourseCardProps) => {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href={`/admin/courses/${data.id}/delete`} className="cursor-pointer">
-                <Trash2 className="size-4 mr2 text-destructive" />
-                Delete
-              </Link>
+                <DeleteCourseModal courseId={data.id} />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -49,7 +47,7 @@ const AdminCourseCard = ({ data }: AdminCourseCardProps) => {
       <CardContent className="p-4">
         <Link
           href={`/admin/courses/${data.id}/edit`}
-          className="font-medium text-lg line-clamp-2 hover:underline group-hover:text-primary transition-colors"
+          className="font-medium text-lg line-clamp-2 hover:underline group-hover:text-primary transition-colors w-fit"
         >
           {data.title}
         </Link>

@@ -11,6 +11,7 @@ import useConstructUrl from "@/hooks/use-construct-url";
 interface UploaderProps {
   value?: string;
   onChange?: (value: string) => void;
+  fileType?: "image" | "video";
 }
 
 interface UploaderState {
@@ -25,7 +26,7 @@ interface UploaderState {
   fileType: "image" | "video";
 }
 
-const Uploader = ({ onChange, value }: UploaderProps) => {
+const Uploader = ({ onChange, value, fileType }: UploaderProps) => {
   const fileUrl = useConstructUrl(value || "");
   const [fileState, setFileState] = useState<UploaderState>({
     id: null,
@@ -34,7 +35,7 @@ const Uploader = ({ onChange, value }: UploaderProps) => {
     progress: 0,
     isDeleting: false,
     error: false,
-    fileType: "image",
+    fileType: fileType || "image",
     key: value,
     objectUrl: value ? fileUrl : undefined,
   });
@@ -47,7 +48,7 @@ const Uploader = ({ onChange, value }: UploaderProps) => {
       progress: 0,
       isDeleting: false,
       error: false,
-      fileType: "image",
+      fileType: fileType || "image",
       objectUrl: undefined,
     });
   };
@@ -99,98 +100,101 @@ const Uploader = ({ onChange, value }: UploaderProps) => {
     }
   };
 
-  const uploadFile = async (file: File) => {
-    setFileState({
-      id: uuidv4(),
-      file: file,
-      uploading: true,
-      progress: 0,
-      isDeleting: false,
-      error: false,
-      fileType: "image",
-      objectUrl: URL.createObjectURL(file),
-    });
-
-    try {
-      const presignedResponse = await fetch(`/api/s3/upload`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fileName: file.name,
-          contentType: file.type,
-          size: file.size,
-          isImage: true,
-        }),
+  const uploadFile = useCallback(
+    async (file: File) => {
+      setFileState({
+        id: uuidv4(),
+        file: file,
+        uploading: true,
+        progress: 0,
+        isDeleting: false,
+        error: false,
+        fileType: fileType || "image",
+        objectUrl: URL.createObjectURL(file),
       });
 
-      if (!presignedResponse.ok) {
-        uploadAndDeleteErrorHandler("فشل في جلب رابط الرفع");
-        return;
-      }
-
-      let data;
       try {
-        data = await presignedResponse.json();
-      } catch (err) {
-        uploadAndDeleteErrorHandler("فشل في تحليل استجابة الخادم");
-        return;
+        const presignedResponse = await fetch(`/api/s3/upload`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fileName: file.name,
+            contentType: file.type,
+            size: file.size,
+            isImage: fileType !== "video",
+          }),
+        });
+
+        if (!presignedResponse.ok) {
+          uploadAndDeleteErrorHandler("فشل في جلب رابط الرفع");
+          return;
+        }
+
+        let data;
+        try {
+          data = await presignedResponse.json();
+        } catch (err) {
+          uploadAndDeleteErrorHandler("فشل في تحليل استجابة الخادم");
+          return;
+        }
+
+        const { preSignedUrl, key } = await data;
+
+        await new Promise<void>((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+
+          xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+              const percentageCompleted = (event.loaded / event.total) * 100;
+              setFileState((prev) => ({
+                ...prev,
+                progress: Math.round(percentageCompleted),
+              }));
+            }
+          };
+
+          xhr.onload = () => {
+            console.log("XHR Status:", xhr.status);
+            console.log("XHR Response:", xhr.responseText);
+
+            if (xhr.status >= 200 && xhr.status < 300) {
+              setFileState((prev) => ({
+                ...prev,
+                progress: 100,
+                uploading: false,
+                key: key,
+              }));
+
+              onChange?.(key);
+
+              toast.success("File uploaded successfully");
+
+              resolve();
+            } else {
+              const errorMsg = `Upload failed: ${xhr.status} - ${xhr.responseText}`;
+              console.error(errorMsg);
+              reject(new Error(errorMsg));
+            }
+          };
+
+          xhr.onerror = () => {
+            console.error("Network error:", xhr.status);
+            reject(new Error("فشل في الاتصال"));
+          };
+
+          xhr.open("PUT", preSignedUrl);
+          xhr.withCredentials = false;
+          xhr.responseType = "text";
+          xhr.setRequestHeader("Content-Type", file.type);
+          xhr.send(file);
+        });
+      } catch (error) {
+        console.error("Upload error:", error);
+        uploadAndDeleteErrorHandler("فشل في رفع الملف");
       }
-
-      const { preSignedUrl, key } = await data;
-
-      await new Promise<void>((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-
-        xhr.upload.onprogress = (event) => {
-          if (event.lengthComputable) {
-            const percentageCompleted = (event.loaded / event.total) * 100;
-            setFileState((prev) => ({
-              ...prev,
-              progress: Math.round(percentageCompleted),
-            }));
-          }
-        };
-
-        xhr.onload = () => {
-          console.log("XHR Status:", xhr.status);
-          console.log("XHR Response:", xhr.responseText);
-
-          if (xhr.status >= 200 && xhr.status < 300) {
-            setFileState((prev) => ({
-              ...prev,
-              progress: 100,
-              uploading: false,
-              key: key,
-            }));
-
-            onChange?.(key);
-
-            toast.success("File uploaded successfully");
-
-            resolve();
-          } else {
-            const errorMsg = `Upload failed: ${xhr.status} - ${xhr.responseText}`;
-            console.error(errorMsg);
-            reject(new Error(errorMsg));
-          }
-        };
-
-        xhr.onerror = () => {
-          console.error("Network error:", xhr.status);
-          reject(new Error("فشل في الاتصال"));
-        };
-
-        xhr.open("PUT", preSignedUrl);
-        xhr.withCredentials = false;
-        xhr.responseType = "text";
-        xhr.setRequestHeader("Content-Type", file.type);
-        xhr.send(file);
-      });
-    } catch (error) {
-      console.error("Upload error:", error);
-      uploadAndDeleteErrorHandler("فشل في رفع الملف");
-    }
-  };
+    },
+    [fileType, onChange]
+  );
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -202,7 +206,7 @@ const Uploader = ({ onChange, value }: UploaderProps) => {
         uploadFile(file);
       }
     },
-    [fileState.objectUrl]
+    [fileState.objectUrl, uploadFile, fileType]
   );
 
   const onDropRejectedHandler = (fileRejection: FileRejection[]) => {
@@ -219,10 +223,10 @@ const Uploader = ({ onChange, value }: UploaderProps) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { "image/*": [] },
+    accept: fileType === "video" ? { "video/*": [] } : { "image/*": [] },
     maxFiles: 1,
     multiple: false,
-    maxSize: 1024 * 1024 * 5,
+    maxSize: fileType === "video" ? 1024 * 1024 * 5000 : 1024 * 1024 * 5,
     onDropRejected: onDropRejectedHandler,
     disabled: fileState.uploading || !!fileState.objectUrl,
   });
@@ -239,7 +243,14 @@ const Uploader = ({ onChange, value }: UploaderProps) => {
     if (fileState.uploading) return <RenderUploadingState progress={fileState.progress} file={fileState.file as File} />;
     else if (fileState.error) return <RenderErrorState reTryHandler={reTryHandler} />;
     else if (fileState.objectUrl)
-      return <RenderUploadedState previewUrl={fileState.objectUrl} isDeleting={fileState.isDeleting} removeFileHandler={removeFileHandler} />;
+      return (
+        <RenderUploadedState
+          previewUrl={fileState.objectUrl}
+          isDeleting={fileState.isDeleting}
+          removeFileHandler={removeFileHandler}
+          fileType={fileType}
+        />
+      );
     return <RenderEmptyState isDragActive={isDragActive} />;
   };
 

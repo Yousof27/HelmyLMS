@@ -38,12 +38,17 @@ interface RenderUploadedStateProps {
   previewUrl: string;
   isDeleting: boolean;
   removeFileHandler: () => void;
+  fileType?: "image" | "video";
 }
 
-export function RenderUploadedState({ previewUrl, isDeleting, removeFileHandler }: RenderUploadedStateProps) {
+export function RenderUploadedState({ previewUrl, isDeleting, removeFileHandler, fileType }: RenderUploadedStateProps) {
   return (
-    <div className="text-center">
-      <Image src={previewUrl} alt="Uploaded File" fill className="object-contain p-2" />
+    <div className="text-center w-full h-full flex items-center justify-center">
+      {fileType === "video" ? (
+        <video src={previewUrl} controls className="rounded-lg w-full h-full" />
+      ) : (
+        <Image src={previewUrl} alt="Uploaded File" fill className="object-contain p-2" />
+      )}
       <Button
         onClick={removeFileHandler}
         disabled={isDeleting}

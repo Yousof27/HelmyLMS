@@ -7,7 +7,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { AdminSingleCourseType } from "@/app/data/admin/admin-get-course";
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronRight, FileText, GripVertical, Plus, Trash2 } from "lucide-react";
+import { ChevronRight, FileText, GripVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CollapsibleContent } from "@radix-ui/react-collapsible";
 import Link from "next/link";
@@ -247,13 +247,12 @@ function SortableItem({ children, id, data }: SortableItemProps) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    zIndex: isDragging ? 9999 : "auto",
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} className={`touch-none ${isDragging ? "z-10" : ""}`}>
+    <div ref={setNodeRef} style={style} {...attributes} className={`touch-none`}>
       {children(listeners)}
     </div>
   );
 }
-
-// Edit Course Error: PrismaClientKnownRequestError: Invalid `lessons.map((lesson)=>__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].lesson.update()` invocation in D:\Web\1- Front End\4- Next JS\lms-project\.next\dev\server\chunks\ssr\[root-of-the-server]__6588717a._.js:649:170 646 error: "No lessons to reordering" 647 }; 648 } → 649 const updates = lessons.map((lesson)=>__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].lesson.update(

@@ -15,10 +15,6 @@ const NewChapterModal = ({ courseId }: { courseId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
-  const onOpenChangeHandler = (open: boolean) => {
-    setIsOpen(open);
-  };
-
   const form = useForm<chapterSchemaType>({
     resolver: zodResolver(chapterSchema),
     defaultValues: {
@@ -44,6 +40,13 @@ const NewChapterModal = ({ courseId }: { courseId: string }) => {
         setIsOpen(false);
       }
     });
+  };
+
+  const onOpenChangeHandler = (open: boolean) => {
+    if (!open) {
+      form.reset();
+    }
+    setIsOpen(open);
   };
 
   return (

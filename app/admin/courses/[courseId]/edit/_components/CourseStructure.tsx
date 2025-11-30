@@ -177,7 +177,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
     <DndContext collisionDetection={rectIntersection} onDragEnd={handleDragEnd} sensors={sensors}>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between border-b border-border">
-          <CardTitle>Chapters</CardTitle>
+          <CardTitle>Chapters: {items.length}</CardTitle>
           <NewChapterModal courseId={course.id} />
         </CardHeader>
 

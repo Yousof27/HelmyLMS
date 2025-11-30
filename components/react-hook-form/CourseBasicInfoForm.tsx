@@ -21,6 +21,7 @@ import RichTextEditor from "../rich-text-editor/Editor";
 import { COURSE_LEVELS, COURSE_STATUSES } from "@/lib/enums";
 import { AdminSingleCourseType } from "@/app/data/admin/admin-get-course";
 import { editCourseAction } from "@/app/admin/courses/[courseId]/edit/actions";
+import { useConfetti } from "@/hooks/use-confetii";
 
 interface CourseBasicInfoFormProps {
   data?: AdminSingleCourseType;
@@ -31,6 +32,7 @@ interface CourseBasicInfoFormProps {
 const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicInfoFormProps) => {
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+  const { triggerConfetii } = useConfetti();
 
   const form = useForm<courseSchemaType>({
     resolver: zodResolver(courseSchema),
@@ -61,6 +63,9 @@ const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicIn
         toast.error(result.error);
       } else if (result.statusText === "success") {
         toast.success(result.message);
+        if (usage === "create") {
+          triggerConfetii();
+        }
         form.reset();
         router.push("/admin/courses");
       }
@@ -117,7 +122,7 @@ const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicIn
 
         <FormSelect form={form} name="status" label="Status" placeholder="Select Status" selectTriggerCSS="w-full" selectContent={COURSE_STATUSES} />
 
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" disabled={pending} className="gap-1">
           {pending ? (
             <>
               {usage === "create" ? "Creating" : "Editing"}... <Loader2 className="ml-1 animate-spin" />
@@ -126,11 +131,13 @@ const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicIn
             <>
               {usage === "create" ? (
                 <>
-                  Create Course <PlusIcon className="ml-1 size-5" />
+                  <PlusIcon className="size-5" />
+                  Create Course
                 </>
               ) : (
                 <>
-                  Edit Course <Pencil className="ml-1" />
+                  <Pencil />
+                  Edit Course
                 </>
               )}
             </>

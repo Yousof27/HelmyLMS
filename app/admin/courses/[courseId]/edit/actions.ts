@@ -3,6 +3,7 @@
 import { requireAdmin } from "@/app/data/admin/require-admin";
 import arcjet, { detectBot, fixedWindow } from "@/lib/arcjet";
 import { prisma } from "@/lib/db";
+import { createSlug, generateUniqueCourseSlug } from "@/lib/slug";
 import { actionResponse } from "@/lib/types";
 import { chapterSchema, courseSchema, courseSchemaType, lessonSchema } from "@/lib/zodSchemas";
 import { request } from "@arcjet/next";
@@ -47,9 +48,22 @@ export async function editCourseAction(data: courseSchemaType, courseId: string)
       };
     }
 
-    const updatedCourse = await prisma.course.update({
-      where: { id: courseId },
-      data: { ...validation.data },
+    const course = await prisma.course.findUnique({ where: { id: courseId }, select: { title: true, slug: true } });
+
+    if (!course) {
+      return {
+        statusText: "error",
+        error: "Course Is Not Exists !",
+      };
+    }
+
+    await prisma.$transaction(async (tx) => {
+      const slug = createSlug(course.title) === createSlug(data.title) ? course.slug : await generateUniqueCourseSlug(data.title);
+
+      await tx.course.update({
+        where: { id: courseId },
+        data: { ...validation.data, slug },
+      });
     });
 
     return {

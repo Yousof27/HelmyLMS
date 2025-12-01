@@ -5,7 +5,7 @@ import AdminCourseCard, { AdminCourseCardSkeleton } from "./_components/AdminCou
 import EmptyState from "@/components/general/EmptyState";
 import { Suspense } from "react";
 
-const CoursesPage = async () => {
+const AdminCoursesPage = async () => {
   return (
     <>
       <div className="flex items-center justify-between">
@@ -50,4 +50,4 @@ export function AdminCourseCardSkeletonLayout() {
   );
 }
 
-export default CoursesPage;
+export default AdminCoursesPage;

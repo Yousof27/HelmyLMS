@@ -3,6 +3,7 @@
 import { requireAdmin } from "@/app/data/admin/require-admin";
 import arcjet, { detectBot, fixedWindow } from "@/lib/arcjet";
 import { prisma } from "@/lib/db";
+import { generateUniqueCourseSlug } from "@/lib/slug";
 import { actionResponse } from "@/lib/types";
 import { courseSchema, courseSchemaType } from "@/lib/zodSchemas";
 import { request } from "@arcjet/next";
@@ -45,11 +46,16 @@ export async function createCourseAction(data: courseSchemaType): Promise<action
       };
     }
 
-    await prisma.course.create({
-      data: {
-        ...validation.data,
-        userId: session?.user.id as string,
-      },
+    await prisma.$transaction(async (tx) => {
+      const slug = await generateUniqueCourseSlug(validation.data.title);
+
+      await tx.course.create({
+        data: {
+          ...validation.data,
+          slug,
+          userId: session.user.id as string,
+        },
+      });
     });
 
     return {

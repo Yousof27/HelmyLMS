@@ -32,7 +32,7 @@ const AdminCourseCard = ({ data }: AdminCourseCardProps) => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/admin/courses/${data.slug}`} className="cursor-pointer">
+              <Link href={`/courses/${data.slug}`} className="cursor-pointer">
                 <Eye className="size-4 mr2" />
                 Preview
               </Link>

@@ -11,7 +11,6 @@ import { toast } from "sonner";
 import { Form } from "../ui/form";
 import FormInput from "./FormInput";
 import { Button } from "../ui/button";
-import slugify from "slugify";
 import { Loader2, Pencil, PlusIcon, SparkleIcon } from "lucide-react";
 import FormTextArea from "./FormTextArea";
 import CustomFormField from "./CustomFormField";
@@ -45,7 +44,6 @@ const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicIn
       level: data?.level ?? undefined,
       category: data?.category ?? "",
       status: data?.status ?? undefined,
-      slug: data?.slug ?? "",
       smallDescription: data?.smallDescription ?? "",
     },
   });
@@ -76,21 +74,6 @@ const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicIn
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormInput form={form} name="title" label="Title" placeholder="Enter course title..." />
-
-        <div className="flex gap-4 items-end">
-          <FormInput form={form} name="slug" label="Slug" placeholder="auto-generate-slug" FormItemCSS="w-full" />
-
-          <Button
-            type="button"
-            onClick={() => {
-              const title = form.getValues("title");
-              const slug = slugify(title);
-              form.setValue("slug", slug, { shouldValidate: true });
-            }}
-          >
-            Generate slug <SparkleIcon className="ml-1" size={16} />
-          </Button>
-        </div>
 
         <FormTextArea form={form} name="smallDescription" label="Small Description" placeholder="Small Description" textareaCSS="min-h-[120px]" />
 

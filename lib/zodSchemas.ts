@@ -29,7 +29,6 @@ export const courseSchema = z.object({
     .string()
     .min(3, { error: "Small Description must be at least 3 characters long" })
     .max(200, { error: "Small Description must be at most 200 characters long" }),
-  slug: z.string().min(3, { error: "Slug must be at least 3 characters" }),
   status: z.enum(COURSE_STATUSES, { error: "Status is required" }),
 });
 

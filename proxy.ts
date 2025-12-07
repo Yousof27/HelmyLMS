@@ -12,6 +12,7 @@ const aj = arcjet({
         "CATEGORY:SEARCH_ENGINE",
         "CATEGORY:MONITOR", // Uptime monitoring services
         "CATEGORY:PREVIEW", // Link previews e.g. Slack, Discord
+        "STRIPE_WEBHOOK",
       ],
     }),
   ],

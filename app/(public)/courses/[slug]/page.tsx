@@ -1,14 +1,17 @@
 import getCourse from "@/app/data/course/get-course";
 import RenderDescription from "@/components/rich-text-editor/RenderDescription";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import useConstructUrl from "@/hooks/use-construct-url";
 import { IconBook, IconCategory, IconChartBar, IconChevronDown, IconClock, IconPlayerPlay } from "@tabler/icons-react";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, Eye } from "lucide-react";
 import Image from "next/image";
+import { isUserEnrolled } from "@/app/data/user/is-user-enrolled";
+import Link from "next/link";
+import EnrollmentButton from "./_components/EnrollmentButton";
 
 interface CourseReviewPageProps {
   params: Promise<{ slug: string }>;
@@ -18,6 +21,8 @@ const CourseReviewPage = async ({ params }: CourseReviewPageProps) => {
   const { slug } = await params;
   const course = await getCourse(slug);
   const thumbnailUrl = useConstructUrl(course.fileKey);
+  const userEnrolled = await isUserEnrolled(course.id);
+
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 mt-5">
       <div className="order-1 lg:col-span-2">
@@ -217,7 +222,14 @@ const CourseReviewPage = async ({ params }: CourseReviewPageProps) => {
                 </ul>
               </div>
 
-              <Button className="w-full">Enroll Now!</Button>
+              {userEnrolled ? (
+                <Link href={"/dashboard"} className={buttonVariants({ className: "w-full" })}>
+                  <Eye /> Watch Now
+                </Link>
+              ) : (
+                <EnrollmentButton courseId={course.id} />
+              )}
+
               <p className="mt-3 text-center text-xs text-muted-foreground">30-day money-back guarantee</p>
             </CardContent>
           </Card>

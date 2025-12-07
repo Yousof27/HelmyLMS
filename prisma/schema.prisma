@@ -19,7 +19,7 @@ model User {
   accounts          Account[]
   courses           Course[]
   enrollments       Enrollment[]
-  stripeCustormerId String?      @unique
+  stripeCustomerId  String?      @unique
   role              String?
   banned            Boolean?     @default(false)
   banReason         String?
@@ -147,4 +147,5 @@ model Enrollment {
   userId    String
   course    Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId  String
+  @@unique([userId, courseId])
 }

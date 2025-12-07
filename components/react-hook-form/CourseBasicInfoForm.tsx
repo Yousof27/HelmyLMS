@@ -100,7 +100,7 @@ const CourseBasicInfoForm = ({ data, usage = "create", courseId }: CourseBasicIn
 
           <FormInput form={form} name="duration" label="Duration (hours)" type="number" placeholder="0" />
 
-          <FormInput form={form} name="price" label="Price ($)" type="number" placeholder="0" />
+          <FormInput form={form} name="price" label="Price (EGP)" type="number" placeholder="0" />
         </div>
 
         <FormSelect form={form} name="status" label="Status" placeholder="Select Status" selectTriggerCSS="w-full" selectContent={COURSE_STATUSES} />

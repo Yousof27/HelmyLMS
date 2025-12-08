@@ -4,7 +4,6 @@ import * as React from "react";
 import {
   IconCamera,
   IconChartBar,
-  IconLayoutDashboard,
   IconFileAi,
   IconFileDescription,
   IconFolder,
@@ -26,19 +25,14 @@ import Link from "next/link";
 const data = {
   navMain: [
     {
-      title: "Dashboard",
+      title: "Analytics",
       url: "/admin",
-      icon: IconLayoutDashboard,
+      icon: IconChartBar,
     },
     {
       title: "Courses",
       url: "/admin/courses",
       icon: IconBook,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
     },
     {
       title: "Projects",

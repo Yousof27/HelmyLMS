@@ -16,7 +16,7 @@ const AdminCoursesPage = async () => {
         </Link>
       </div>
 
-      <Suspense fallback={<AdminCourseCardSkeletonLayout />}>
+      <Suspense fallback={<AdminCoursesCardSkeletonLayout length={4} containerCSS="grid grid-cols-1 sm:grid-cols-2 gap-7" />}>
         <RenderCourses />
       </Suspense>
     </>
@@ -28,7 +28,7 @@ export async function RenderCourses() {
   return (
     <>
       {courses.length === 0 ? (
-        <EmptyState title="No courses found" description="Create a new course" buttonText="Create Course" href="/admin/courses/create" />
+        <EmptyState title="No courses yet" description="Create a new course" buttonText="Create Course" href="/admin/courses/create" />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-7">
           {courses.map((course) => (
@@ -40,10 +40,10 @@ export async function RenderCourses() {
   );
 }
 
-export function AdminCourseCardSkeletonLayout() {
+export function AdminCoursesCardSkeletonLayout({ length, containerCSS }: { length: number; containerCSS: string }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-7">
-      {Array.from({ length: 4 }).map((_, index) => (
+    <div className={containerCSS}>
+      {Array.from({ length: length }).map((_, index) => (
         <AdminCourseCardSkeleton key={index} />
       ))}
     </div>

@@ -5,28 +5,13 @@ import { ReactNode } from "react";
 
 const navMain = [
   {
-    title: "Analytics",
-    url: "/admin",
-    icon: "IconChartBar",
-  },
-  {
-    title: "Courses",
-    url: "/admin/courses",
-    icon: "IconBook",
-  },
-  {
-    title: "Projects",
-    url: "#",
-    icon: "IconFolder",
-  },
-  {
-    title: "Team",
-    url: "#",
-    icon: "IconUsers",
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: "IconLayoutDashboardFilled",
   },
 ];
 
-const AdminLayout = ({ children }: { children: ReactNode }) => {
+const DashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
     <SidebarProvider
       style={
@@ -49,4 +34,4 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default AdminLayout;
+export default DashboardLayout;

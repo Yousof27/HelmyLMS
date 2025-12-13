@@ -9,7 +9,7 @@ import AdminCourseCard from "./courses/_components/AdminCourseCard";
 import { Suspense } from "react";
 import { AdminCoursesCardSkeletonLayout } from "./courses/page";
 
-export default async function Page() {
+export default async function AdminPage() {
   const enrollments = await adminGetEnrollmentStats();
   return (
     <>
@@ -23,7 +23,7 @@ export default async function Page() {
             View All Courses
           </Link>
         </div>
-        <Suspense fallback={<AdminCoursesCardSkeletonLayout length={2} containerCSS="grid grid-cols-1 md:grid-cols-2 gap-6" />}>
+        <Suspense fallback={<AdminCoursesCardSkeletonLayout length={2} containerCSS="grid grid-cols-1 @lg:grid-cols-2 @4xl:grid-cols-3 @7xl:grid-cols-4 gap-7" />}>
           <RenderRecentCourses />
         </Suspense>
       </div>
@@ -46,7 +46,7 @@ async function RenderRecentCourses() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 @lg:grid-cols-2 @4xl:grid-cols-3 @7xl:grid-cols-4 gap-7">
       {courses.map((course) => (
         <AdminCourseCard data={course} key={course.id} />
       ))}

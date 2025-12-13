@@ -2,16 +2,15 @@
 
 import * as React from "react";
 import {
-  IconCamera,
   IconChartBar,
-  IconFileAi,
-  IconFileDescription,
   IconFolder,
   IconHelp,
   IconBook,
   IconSearch,
   IconSettings,
   IconUsers,
+  type Icon,
+  IconLayoutDashboardFilled,
 } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/sidebar/nav-main";
@@ -22,103 +21,54 @@ import Image from "next/image";
 import Logo from "@/public/logo.png";
 import Link from "next/link";
 
-const data = {
-  navMain: [
-    {
-      title: "Analytics",
-      url: "/admin",
-      icon: IconChartBar,
-    },
-    {
-      title: "Courses",
-      url: "/admin/courses",
-      icon: IconBook,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
-  ],
+const navSecondary = [
+  {
+    title: "Settings",
+    url: "#",
+    icon: IconSettings,
+  },
+  {
+    title: "Get Help",
+    url: "#",
+    icon: IconHelp,
+  },
+  {
+    title: "Search",
+    url: "#",
+    icon: IconSearch,
+  },
+];
+
+const iconMap: Record<string, Icon> = {
+  IconChartBar,
+  IconBook,
+  IconFolder,
+  IconUsers,
+  IconSettings,
+  IconHelp,
+  IconSearch,
+  IconLayoutDashboardFilled,
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
+  navMain: {
+    title: string;
+    url: string;
+    icon?: string;
+  }[];
+};
+
+export function AppSidebar({ navMain, ...props }: AppSidebarProps) {
+  const navMainWithIcons = navMain.map((item) => ({
+    ...item,
+    icon: item.icon ? iconMap[item.icon] : undefined,
+  }));
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5! hover:bg-transparent w-fit">
               <Link href={"/"}>
                 <Image src={Logo} alt="Logo" className="size-5 rounded-lg" />
                 <span className="text-base font-semibold">HelmyLMS</span>
@@ -128,8 +78,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavMain items={navMainWithIcons} />
+        <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

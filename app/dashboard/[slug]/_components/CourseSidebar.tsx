@@ -1,23 +1,16 @@
-"use client";
-
 import { CourseSidebarDataType } from "@/app/data/course/get-course-sidebar-data";
-import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Progress } from "@/components/ui/progress";
-import { ChevronDown, Play } from "lucide-react";
-import LessonItem from "./LessonItem";
-import { usePathname } from "next/navigation";
+import { Play } from "lucide-react";
+import RenderCollapsibleChapters from "./RenderCollapsibleChapters";
+import CourseProgress from "./CourseProgress";
 
 interface CourseSidebarProps {
   course: CourseSidebarDataType;
 }
 
-const CourseSidebar = async ({ course }: CourseSidebarProps) => {
-  const pathname = usePathname();
-  const lessonId = pathname.split("/").pop();
+const CourseSidebar = ({ course }: CourseSidebarProps) => {
   return (
     <div className="flex flex-col h-full">
-      <div className="pb-4 pr-4 border-b border-border">
+      <div className="pb-4 @3xl:pr-4 border-b border-border">
         <div className="flex items-center gap-3 mb-3">
           <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
             <Play className="size-5 text-primary" />
@@ -29,40 +22,12 @@ const CourseSidebar = async ({ course }: CourseSidebarProps) => {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Progress</span>
-            <span className="font-medium">4/10 lessons</span>
-          </div>
-          <Progress value={55} className="h-1.5" />
-          <p className="text-xs text-muted-foreground">55% Complteted</p>
-        </div>
+        <CourseProgress chapters={course.chapters} />
       </div>
 
-      <div className="py-4 pr-4 space-y-3">
+      <div className="py-4 @3xl:pr-4 space-y-3">
         {course.chapters.map((chapter, index) => (
-          <Collapsible key={chapter.id} defaultOpen={index === 0}>
-            <CollapsibleTrigger asChild>
-              <Button variant={"outline"} className="w-full p-3 h-auto flex items-center gap-2">
-                <div>
-                  <ChevronDown className="size-4 text-primary" />
-                </div>
-
-                <div className="flex-1 text-left min-w-0">
-                  <p className="font-semibold text-sm truncate text-foreground">
-                    {chapter.position}: {chapter.title}
-                  </p>
-                  <p className="text-xs text-muted-foreground font-medium truncate">{chapter.lessons.length} Lessons</p>
-                </div>
-              </Button>
-            </CollapsibleTrigger>
-
-            <CollapsibleContent className="mt-3 pl-6 border-l-2 space-y-3">
-              {chapter.lessons.map((lesson) => (
-                <LessonItem key={lesson.id} lesson={lesson} slug={course.slug} isActive={lesson.id === lessonId} />
-              ))}
-            </CollapsibleContent>
-          </Collapsible>
+          <RenderCollapsibleChapters chapter={chapter} index={index} slug={course.slug} />
         ))}
       </div>
     </div>

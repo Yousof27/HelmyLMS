@@ -4,7 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import useConstructUrl from "@/hooks/use-construct-url";
-import { SchoolIcon, TimerIcon } from "lucide-react";
+import { ReceiptText, SchoolIcon, TimerIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -38,7 +38,7 @@ const PublicCourseCard = ({ course }: PublicCourseCardProps) => {
           </div>
         </div>
         <Link href={`/courses/${course.slug}`} className={buttonVariants({ className: "w-full mt-4" })}>
-          Learn More
+          <ReceiptText /> See More
         </Link>
       </CardContent>
     </Card>

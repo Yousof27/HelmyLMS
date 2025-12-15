@@ -13,12 +13,12 @@ const EnrolledCourseLayout = async ({ params, children }: EnrolledCourseLayoutPr
   const course = await getCourseSidebarData(slug);
 
   return (
-    <div className="flex flex-1">
-      <div className="w-80 border-r border-border shrink-0">
+    <div className="flex flex-1 flex-col-reverse @3xl:flex-row">
+      <div className="@3xl:w-80 @3xl:border-r border-border shrink-0 @max-3xl:pt-5 @max-3xl:border-t">
         <CourseSidebar course={course} />
       </div>
 
-      <div className="flex-1 overflow-hidden">{children}</div>
+      <div className="flex-1 relative">{children}</div>
     </div>
   );
 };

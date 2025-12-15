@@ -2,17 +2,17 @@ import "server-only";
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { cache } from "react";
 
-export const requireAdmin = cache(async () => {
+export const requireNotAdmin = cache(async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  if (!session) return redirect("/");
+  if (!session || session.user.role === "admin") {
+    return notFound();
+  }
 
-  if (session.user.role !== "admin") return notFound();
-
-  return session;
+  return session.user;
 });

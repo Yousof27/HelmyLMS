@@ -28,6 +28,9 @@ export function NavUser() {
     return null;
   }
 
+  const dashboardHref: string = session.user.role === "admin" ? "/admin" : "/dashboard";
+  const coursesHref: string = session.user.role === "admin" ? "/admin/courses" : "/courses";
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -79,16 +82,18 @@ export function NavUser() {
                   Home
                 </Link>
               </DropdownMenuItem>
+
               <DropdownMenuItem asChild>
-                <Link href={"/admin"}>
-                  <LayoutDashboardIcon />
-                  Dashboard
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={"/admin/courses"}>
+                <Link href={coursesHref}>
                   <Tv2 />
                   Courses
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem asChild>
+                <Link href={dashboardHref}>
+                  <LayoutDashboardIcon />
+                  Dashboard
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>

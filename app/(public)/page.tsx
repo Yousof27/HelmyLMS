@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import { getDashboardRoute } from "../data/routes/dashboard-route";
 
 interface featureProps {
   title: string;
@@ -32,7 +33,9 @@ const features: featureProps[] = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const { dashboardRoute } = await getDashboardRoute();
+
   return (
     <>
       <section className="relative py-20">
@@ -57,9 +60,9 @@ export default function Home() {
                 size: "lg",
                 variant: "outline",
               })}
-              href="/login"
+              href={dashboardRoute.href}
             >
-              Sign in
+              {dashboardRoute.name}
             </Link>
           </div>
         </div>

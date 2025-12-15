@@ -39,7 +39,14 @@ export function NavMain({ items }: NavMainProps) {
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton tooltip={item.title} asChild>
-                <Link href={item.url} className={pathName === item.url ? "bg-sidebar-accent text-sidebar-accent-foreground" : ""}>
+                <Link
+                  href={item.url}
+                  className={
+                    pathName === item.url || (pathName.includes("/create") && item.url === "/admin/courses")
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : ""
+                  }
+                >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </Link>

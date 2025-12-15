@@ -1,3 +1,5 @@
+"use client";
+
 import { BookOpen, ChevronDownIcon, Home, LayoutDashboardIcon, LogOutIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,9 +20,10 @@ interface iAppProps {
   name: string;
   email: string;
   image: string;
+  dashboardHref: string;
 }
 
-export function UserDropdown({ name, email, image }: iAppProps) {
+export function UserDropdown({ name, email, image, dashboardHref }: iAppProps) {
   const signOutHandler = useSignOut();
 
   return (
@@ -47,18 +50,22 @@ export function UserDropdown({ name, email, image }: iAppProps) {
               <span>Home</span>
             </Link>
           </DropdownMenuItem>
+
           <DropdownMenuItem asChild>
             <Link href={"/courses"}>
               <BookOpen size={16} className="opacity-60" aria-hidden="true" />
               <span>Courses</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href={"/dashboard"}>
-              <LayoutDashboardIcon size={16} className="opacity-60" aria-hidden="true" />
-              <span>Dashboard</span>
-            </Link>
-          </DropdownMenuItem>
+
+          {dashboardHref !== "/login" && (
+            <DropdownMenuItem asChild>
+              <Link href={dashboardHref}>
+                <LayoutDashboardIcon size={16} className="opacity-60" aria-hidden="true" />
+                <span>Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOutHandler}>

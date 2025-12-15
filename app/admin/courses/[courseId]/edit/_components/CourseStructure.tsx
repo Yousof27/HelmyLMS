@@ -37,7 +37,6 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
       id: chapter.id,
       title: chapter.title,
       order: chapter.position,
-      isOpen: true,
       lessons: chapter.lessons.map((lesson) => ({
         id: lesson.id,
         title: lesson.title,
@@ -46,24 +45,31 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
     })) || [];
 
   const [items, setItems] = useState(initialItems);
+  const [openChapters, setOpenChapters] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    setItems((prevItems) => {
-      const updatedItems =
-        course.chapters.map((chapter) => ({
-          id: chapter.id,
-          title: chapter.title,
-          order: chapter.position,
-          isOpen: prevItems.find((item) => item.id === chapter.id)?.isOpen || true,
-          lessons: chapter.lessons.map((lesson) => ({
-            id: lesson.id,
-            title: lesson.title,
-            order: lesson.position,
-          })),
-        })) || [];
-      return updatedItems;
-    });
+    const updatedItems =
+      course.chapters.map((chapter) => ({
+        id: chapter.id,
+        title: chapter.title,
+        order: chapter.position,
+        lessons: chapter.lessons.map((lesson) => ({
+          id: lesson.id,
+          title: lesson.title,
+          order: lesson.position,
+        })),
+      })) || [];
+
+    setItems(updatedItems);
   }, [course]);
+
+  useEffect(() => {
+    setOpenChapters((prev) => {
+      const newSet = new Set(prev);
+      items.forEach((item) => newSet.add(item.id));
+      return newSet;
+    });
+  }, []);
 
   function returnErrorToast(message: string) {
     toast.error(message);
@@ -163,7 +169,11 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
   }
 
   function toggleChapter(chapterId: string) {
-    setItems(items.map((chapter) => (chapter.id === chapterId ? { ...chapter, isOpen: !chapter.isOpen } : chapter)));
+    setOpenChapters((prev) => {
+      const newSet = new Set(prev);
+      newSet.has(chapterId) ? newSet.delete(chapterId) : newSet.add(chapterId);
+      return newSet;
+    });
   }
 
   const sensors = useSensors(
@@ -175,35 +185,38 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
 
   return (
     <DndContext collisionDetection={rectIntersection} onDragEnd={handleDragEnd} sensors={sensors}>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between border-b border-border">
+      <Card className="@max-xl:py-3 @max-xl:gap-3">
+        <CardHeader className="flex flex-row items-center justify-between border-b border-border @max-xl:px-3 @max-xl:pb-3!">
           <CardTitle>Chapters: {items.length}</CardTitle>
           <NewChapterModal courseId={course.id} />
         </CardHeader>
 
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-3 @max-xl:px-3">
           <SortableContext items={items} strategy={verticalListSortingStrategy}>
             {items.map((chapter) => (
               <SortableItem key={chapter.id} id={chapter.id} data={{ type: "chapter" }}>
                 {(listeners) => (
                   <Card className="py-0">
-                    <Collapsible open={chapter.isOpen} onOpenChange={() => toggleChapter(chapter.id)}>
-                      <div className="flex items-center justify-between p-3 border-b border-border">
+                    <Collapsible open={openChapters.has(chapter.id)} onOpenChange={() => toggleChapter(chapter.id)}>
+                      <div className="flex items-center justify-between p-2 border-b border-border">
                         <div className="flex items-center gap-0">
                           <Button variant="ghost" size="icon" className="cursor-grab opacity-60 hover:opacity-100" {...listeners}>
                             <GripVertical className="size-4" />
                           </Button>
                           <CollapsibleTrigger asChild>
-                            <Button variant="ghost" className="group flex items-center hover:bg-transparent! hover:text-primary">
-                              <ChevronRight className={`size-4 ${chapter.isOpen ? "rotate-90" : "rotate-0"} transition-transform`} />
-                              <p>{chapter.title}</p>
+                            <Button
+                              variant="ghost"
+                              className="group flex items-center hover:bg-transparent! hover:text-primary pl-1.5! w-49 @sm:w-59 @md:w-[18rem] @lg:w-88.5 @2xl:w-md @3xl:w-133 @4xl:w-156 @5xl:w-196 @6xl:w-228"
+                            >
+                              <ChevronRight className={`size-4 ${openChapters.has(chapter.id) ? "rotate-90" : "rotate-0"} transition-transform`} />
+                              <p className="w-full text-left truncate">{chapter.title}</p>
                             </Button>
                           </CollapsibleTrigger>
                         </div>
                         <DeleteChapterModal courseId={course.id} chapterId={chapter.id} />
                       </div>
                       <CollapsibleContent>
-                        <div className="p-1">
+                        <div>
                           <SortableContext items={chapter.lessons} strategy={verticalListSortingStrategy}>
                             {chapter.lessons.map((lesson) => (
                               <SortableItem key={lesson.id} id={lesson.id} data={{ type: "lesson", chapterId: chapter.id }}>
@@ -214,7 +227,12 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
                                         <GripVertical className="size-4" />
                                       </Button>
                                       <FileText className="size-4" />
-                                      <Link href={`/admin/courses/${course.id}/${chapter.id}/${lesson.id}`}>{lesson.title}</Link>
+                                      <Link
+                                        href={`/admin/courses/${course.id}/${chapter.id}/${lesson.id}`}
+                                        className="w-39 @sm:w-49 @md:w-62 @lg:w-78.5 @2xl:w-100 @3xl:w-123 @4xl:w-155 @5xl:w-186 @6xl:w-218 truncate"
+                                      >
+                                        {lesson.title}
+                                      </Link>
                                     </div>
                                     <DeleteLessonModal courseId={course.id} chapterId={chapter.id} lessonId={lesson.id} />
                                   </div>

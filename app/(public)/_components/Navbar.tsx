@@ -1,26 +1,25 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/public/logo.png";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { authClient } from "@/lib/auth-client";
 import { buttonVariants } from "@/components/ui/button";
 import { UserDropdown } from "./UserDropdown";
+import { getDashboardRoute } from "@/app/data/routes/dashboard-route";
+import RenderRoutes from "./RenderRoutes";
 
 interface navigationItemsProps {
   name: string;
   href: string;
 }
 
-const navigationItems: navigationItemsProps[] = [
+let navigationItems: navigationItemsProps[] = [
   { name: "Home", href: "/" },
   { name: "Courses", href: "/courses" },
-  { name: "Dashboard", href: "/dashboard" },
 ];
 
-const Navbar = () => {
-  const { data: session, isPending } = authClient.useSession();
+const Navbar = async () => {
+  const { dashboardRoute, session } = await getDashboardRoute();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto min-h-16 flex items-center gap-8 px-4 md:px-6 lg:px-8">
@@ -29,22 +28,24 @@ const Navbar = () => {
           <span className="font-bold">HelmyLMS</span>
         </Link>
 
-        <nav className="hidden md:flex md:flex-1 md:items-center md:justify-between">
-          <div className="flex items-center gap-4">
-            {navigationItems.map((item, index) => (
-              <Link href={item.href} key={index} className="text-sm font-medium transition-colors hover:text-primary">
-                {item.name}
+        <nav className="flex flex-1 md:items-center justify-end md:justify-between">
+          <div className="hidden md:flex items-center gap-4">
+            <RenderRoutes navigationItems={navigationItems} />
+            {dashboardRoute.href !== "/login" && (
+              <Link href={dashboardRoute.href} className="text-sm font-medium transition-colors hover:text-primary">
+                {dashboardRoute.name}
               </Link>
-            ))}
+            )}
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            {isPending ? null : session ? (
+            {session ? (
               <>
                 <UserDropdown
                   name={session?.user.name && session?.user.name.length > 0 ? session.user.name : session.user.email.split("@")[0]}
                   email={session.user.email}
                   image={session.user.image || `https://avatar.vercel.sh/${session?.user.email}`}
+                  dashboardHref={dashboardRoute.href}
                 />
               </>
             ) : (

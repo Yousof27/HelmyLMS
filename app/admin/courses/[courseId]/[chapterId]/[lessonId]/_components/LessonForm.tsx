@@ -56,7 +56,7 @@ const LessonForm = ({ lesson, courseId, chapterId }: LessonFormProps) => {
 
   return (
     <div>
-      <Link className={buttonVariants({ variant: "outline", className: "mb-6" })} href={`/admin/courses/${courseId}/edit`}>
+      <Link className={buttonVariants({ variant: "outline", className: "mb-4" })} href={`/admin/courses/${courseId}/edit`}>
         <ArrowLeft className="size-4" />
         <span>Go Back</span>
       </Link>

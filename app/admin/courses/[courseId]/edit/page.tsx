@@ -15,7 +15,7 @@ const EditCourse = async ({ params }: Params) => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8">
+      <h1 className="text-xl @sm:text-2xl @md:text-3xl font-bold mb-8">
         Edit Course: <span className="text-primary underline">{course.title}</span>
       </h1>
 
@@ -26,7 +26,7 @@ const EditCourse = async ({ params }: Params) => {
         </TabsList>
 
         <TabsContent value="basic-info">
-          <Card>
+          <Card className="rounded-none px-0!">
             <CardHeader>
               <CardTitle>Basic Info</CardTitle>
               <CardDescription>Provide basic information about the course.</CardDescription>
@@ -38,12 +38,12 @@ const EditCourse = async ({ params }: Params) => {
         </TabsContent>
 
         <TabsContent value="course-structure">
-          <Card>
-            <CardHeader>
+          <Card className="rounded-none @max-xl:p-0 @max-xl:pt-6 @max-xl:border-l-0 @max-xl:border-r-0 @max-xl:border-b-0 @max-xl:shadow-none">
+            <CardHeader className="@max-xl:px-0">
               <CardTitle>Course Structure</CardTitle>
               <CardDescription>Here you can update course structure.</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="@max-xl:px-0">
               <CourseStructure course={course} />
             </CardContent>
           </Card>

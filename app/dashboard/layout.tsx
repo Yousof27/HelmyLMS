@@ -2,6 +2,7 @@ import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { SiteHeader } from "@/components/sidebar/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { ReactNode } from "react";
+import { requireNotAdmin } from "../data/user/require-not-admin";
 
 const navMain = [
   {
@@ -11,7 +12,8 @@ const navMain = [
   },
 ];
 
-const DashboardLayout = ({ children }: { children: ReactNode }) => {
+const DashboardLayout = async ({ children }: { children: ReactNode }) => {
+  await requireNotAdmin();
   return (
     <SidebarProvider
       style={

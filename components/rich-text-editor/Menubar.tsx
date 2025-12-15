@@ -30,7 +30,7 @@ export function Menubar({ editor }: MenubarProps) {
 
   return (
     <div className="border border-b-input border-t-0 border-l-0 border-r-0 bg-background px-3 py-2">
-      <div className="flex items-center space-x-1">
+      <div className="flex items-center space-x-1 overflow-auto custom-scrollbar">
         <Tooltip>
           <TooltipTrigger asChild>
             <Toggle

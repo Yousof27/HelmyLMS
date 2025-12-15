@@ -53,7 +53,7 @@ const NewChapterModal = ({ courseId }: { courseId: string }) => {
     <Dialog open={isOpen} onOpenChange={onOpenChangeHandler}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          <Plus className="size-4" /> New Chapter
+          <Plus className="size-4" /> Chapter
         </Button>
       </DialogTrigger>
 

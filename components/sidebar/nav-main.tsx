@@ -42,7 +42,7 @@ export function NavMain({ items }: NavMainProps) {
                 <Link
                   href={item.url}
                   className={
-                    pathName === item.url || (pathName.includes("/create") && item.url === "/admin/courses")
+                    pathName === item.url || (pathName.includes("/course") && item.url === "/admin/courses")
                       ? "bg-sidebar-accent text-sidebar-accent-foreground"
                       : ""
                   }

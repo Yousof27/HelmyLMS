@@ -5,6 +5,7 @@ import { CheckIcon, Eye } from "lucide-react";
 import Link from "next/link";
 import EnrollmentButton from "./EnrollmentButton";
 import { buttonVariants } from "@/components/ui/button";
+import { getDashboardRoute } from "@/app/data/routes/dashboard-route";
 
 interface CheckoutCardProps {
   course: PublicSingleCourseType;
@@ -12,7 +13,9 @@ interface CheckoutCardProps {
   slug: string;
 }
 
-const CheckoutCard = ({ course, userEnrolled, slug }: CheckoutCardProps) => {
+const CheckoutCard = async ({ course, userEnrolled, slug }: CheckoutCardProps) => {
+  const { session } = await getDashboardRoute();
+
   return (
     <div className="sticky top-20">
       <Card className="py-0">
@@ -79,7 +82,7 @@ const CheckoutCard = ({ course, userEnrolled, slug }: CheckoutCardProps) => {
             </div>
           </div>
 
-          <div className="mb-6 space-y-4">
+          <div className={`space-y-4 ${session?.user.role !== "admin" && "mb-6"}`}>
             <h4>This course includes:</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-sm">
@@ -105,15 +108,19 @@ const CheckoutCard = ({ course, userEnrolled, slug }: CheckoutCardProps) => {
             </ul>
           </div>
 
-          {userEnrolled ? (
-            <Link href={`/dashboard/${slug}`} className={buttonVariants({ className: "w-full" })}>
-              <Eye /> Watch Now
-            </Link>
-          ) : (
-            <EnrollmentButton courseId={course.id} />
-          )}
+          {session?.user.role !== "admin" && (
+            <>
+              {userEnrolled ? (
+                <Link href={`/dashboard/${slug}`} className={buttonVariants({ className: "w-full" })}>
+                  <Eye /> Watch Now
+                </Link>
+              ) : (
+                <EnrollmentButton courseId={course.id} />
+              )}
 
-          <p className="mt-3 text-center text-xs text-muted-foreground">30-day money-back guarantee</p>
+              <p className="mt-3 text-center text-xs text-muted-foreground">30-day money-back guarantee</p>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

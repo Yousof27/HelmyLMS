@@ -15,7 +15,7 @@ const EnrollmentButton = ({ courseId }: { courseId: string }) => {
       const { data: result, error } = await tryCatch(enrollCourseAction(courseId));
 
       if (error) {
-        toast.error(`Faild to enroll in the course. Please try again`);
+        toast.error(`To enroll in the course, you have to login first.`);
         return;
       }
 

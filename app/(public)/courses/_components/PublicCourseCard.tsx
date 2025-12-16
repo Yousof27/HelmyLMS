@@ -21,7 +21,7 @@ const PublicCourseCard = ({ course }: PublicCourseCardProps) => {
       <CardContent className="p-4">
         <Link
           href={`/courses/${course.slug}`}
-          className="font-medium text-lg line-clamp-2 hover:underline group-hover:text-primary transition-colors w-fit"
+          className="font-medium text-lg line-clamp-1 hover:underline group-hover:text-primary transition-colors w-fit"
         >
           {course.title}
         </Link>

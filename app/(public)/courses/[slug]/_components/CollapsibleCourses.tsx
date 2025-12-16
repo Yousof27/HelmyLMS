@@ -23,7 +23,7 @@ const CollapsibleCourses = ({ course }: { course: PublicSingleCourseType }) => {
                         {index + 1}
                       </p>
                       <div>
-                        <h3 className="text-md lg:text-lg font-semibold text-left">{chapter.title}</h3>
+                        <h3 className="text-md line-clamp-1 lg:text-lg font-semibold text-left">{chapter.title}</h3>
                         <p className="text-sm text-muted-foreground mt-1 text-left sm:hidden">
                           {chapter.lessons.length} lesson
                           {chapter.lessons.length !== 1 ? "s" : ""}
@@ -52,7 +52,7 @@ const CollapsibleCourses = ({ course }: { course: PublicSingleCourseType }) => {
                       </div>
 
                       <div className="flex-1">
-                        <p className="font-medium text-sm lg:text-[16px]">{lesson.title}</p>
+                        <p className="font-medium line-clamp-1 text-sm lg:text-[16px]">{lesson.title}</p>
                         <p className="text-xs text-muted-foreground mt-1">Lesson {lessonIndex + 1}</p>
                       </div>
                     </div>

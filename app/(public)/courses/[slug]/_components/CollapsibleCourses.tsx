@@ -10,7 +10,7 @@ import { useState } from "react";
 const CollapsibleCourses = ({ course }: { course: PublicSingleCourseType }) => {
   return (
     <>
-      {course.chapters.map((chapter: PublicSingleCourseType["chapters"][0], index) => {
+      {course.chapters.map((chapter: PublicSingleCourseType["chapters"][0], index: number) => {
         const [open, setOpen] = useState(index === 0);
         return (
           <Collapsible key={chapter.id} defaultOpen={index === 0} open={open} onOpenChange={setOpen}>

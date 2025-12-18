@@ -75,7 +75,7 @@ const CheckoutCard = async ({ course, userEnrolled, slug }: CheckoutCardProps) =
                 <div>
                   <p className="text-sm font-medium">Total Lessons</p>
                   <p className="text-sm text-muted-foreground">
-                    {course.chapters.reduce((total, chapter) => total + chapter.lessons.length, 0) || 0} Lessons
+                    {course.chapters.reduce((total: number, chapter) => total + chapter.lessons.length, 0) || 0} Lessons
                   </p>
                 </div>
               </div>

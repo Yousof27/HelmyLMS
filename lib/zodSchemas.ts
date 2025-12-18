@@ -1,5 +1,4 @@
 import z from "zod";
-import { COURSE_LEVELS, COURSE_STATUSES } from "./enums";
 
 export const courseCategories = [
   "Development",
@@ -13,6 +12,9 @@ export const courseCategories = [
   "Health & Fitness",
   "Teaching & Academics",
 ];
+
+export const COURSE_LEVELS = ["Beginner", "Intermediate", "Advanced"];
+export const COURSE_STATUSES = ["Drafted", "Published", "Archived"];
 
 export const courseSchema = z.object({
   title: z.string().min(3, { error: "Title must be at least 3 characters long" }).max(100, { error: "Title must be at most 100 characters long" }),

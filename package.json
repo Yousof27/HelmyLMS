@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next eslint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@arcjet/inspect": "1.0.0-beta.14",
@@ -53,7 +53,7 @@
     "html-react-parser": "^5.2.10",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.552.0",
-    "next": "16.0.1",
+    "next": "16.0.10",
     "next-themes": "^0.4.6",
     "pg": "^8.16.3",
     "react": "19.2.0",

@@ -2,7 +2,7 @@
 
 import { createCourseAction } from "@/app/admin/courses/create/actions";
 import { tryCatch } from "@/hooks/use-tryCatch";
-import { courseCategories, courseSchema, courseSchemaType } from "@/lib/zodSchemas";
+import { COURSE_LEVELS, COURSE_STATUSES, courseCategories, courseSchema, courseSchemaType } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -11,13 +11,12 @@ import { toast } from "sonner";
 import { Form } from "../ui/form";
 import FormInput from "./FormInput";
 import { Button } from "../ui/button";
-import { Loader2, Pencil, PlusIcon, SparkleIcon } from "lucide-react";
+import { Loader2, Pencil, PlusIcon } from "lucide-react";
 import FormTextArea from "./FormTextArea";
 import CustomFormField from "./CustomFormField";
 import Uploader from "../file-uploader/Uploader";
 import FormSelect from "./FormSelect";
 import RichTextEditor from "../rich-text-editor/Editor";
-import { COURSE_LEVELS, COURSE_STATUSES } from "@/lib/enums";
 import { AdminSingleCourseType } from "@/app/data/admin/admin-get-course";
 import { editCourseAction } from "@/app/admin/courses/[courseId]/edit/actions";
 import { useConfetti } from "@/hooks/use-confetii";

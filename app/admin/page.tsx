@@ -47,7 +47,7 @@ async function RenderRecentCourses() {
 
   return (
     <div className="grid grid-cols-1 @lg:grid-cols-2 @4xl:grid-cols-3 @7xl:grid-cols-4 gap-7">
-      {courses.map((course) => (
+      {courses.map((course: any) => (
         <AdminCourseCard data={course} key={course.id} />
       ))}
     </div>

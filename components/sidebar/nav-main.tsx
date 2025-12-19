@@ -36,7 +36,7 @@ export function NavMain({ items }: NavMainProps) {
           </SidebarMenu>
         )}
         <SidebarMenu>
-          {items.map((item) => (
+          {items.map((item: any) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton tooltip={item.title} asChild>
                 <Link

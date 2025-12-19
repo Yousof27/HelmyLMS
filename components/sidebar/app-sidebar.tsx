@@ -59,7 +59,7 @@ type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
 };
 
 export function AppSidebar({ navMain, ...props }: AppSidebarProps) {
-  const navMainWithIcons = navMain.map((item) => ({
+  const navMainWithIcons = navMain.map((item: any) => ({
     ...item,
     icon: item.icon ? iconMap[item.icon] : undefined,
   }));

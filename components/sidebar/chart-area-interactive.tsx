@@ -19,7 +19,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ChartAreaInteractive({ enrollments }: ChartAreaInteractiveProps) {
-  const totalEnrollments = useMemo(() => enrollments.reduce((prev, { enrollments }) => prev + enrollments, 0), [enrollments]);
+  const totalEnrollments = useMemo(() => enrollments.reduce((prev: any, { enrollments }: any) => prev + enrollments, 0), [enrollments]);
   return (
     <Card className="@container/card">
       <CardHeader>
@@ -30,7 +30,7 @@ export function ChartAreaInteractive({ enrollments }: ChartAreaInteractiveProps)
         </CardDescription>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
+        <ChartContainer config={chartConfig} className="aspect-auto h-62.5 w-full">
           <BarChart data={enrollments} margin={{ left: 12, right: 12 }}>
             <CartesianGrid vertical={false} />
             <XAxis
@@ -51,7 +51,7 @@ export function ChartAreaInteractive({ enrollments }: ChartAreaInteractiveProps)
             <ChartTooltip
               content={
                 <ChartTooltipContent
-                  className="w-[150px]"
+                  className="w-37.5"
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",

@@ -35,7 +35,7 @@ export async function RenderCourses() {
         <EmptyState title="No courses yet" description="Create a new course" buttonText="Create Course" href="/admin/courses/create" />
       ) : (
         <div className="grid grid-cols-1 @lg:grid-cols-2 @4xl:grid-cols-3 @7xl:grid-cols-4 gap-7">
-          {courses.map((course) => (
+          {courses.map((course: any) => (
             <AdminCourseCard key={course.id} data={course} />
           ))}
         </div>
@@ -47,7 +47,7 @@ export async function RenderCourses() {
 export function AdminCoursesCardSkeletonLayout({ length, containerCSS }: { length: number; containerCSS: string }) {
   return (
     <div className={containerCSS}>
-      {Array.from({ length: length }).map((_, index) => (
+      {Array.from({ length: length }).map((_, index: number) => (
         <AdminCourseCardSkeleton key={index} />
       ))}
     </div>

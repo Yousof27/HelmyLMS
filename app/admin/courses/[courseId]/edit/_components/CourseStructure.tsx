@@ -33,11 +33,11 @@ interface SortableItemProps {
 
 const CourseStructure = ({ course }: CourseStructureProps) => {
   const initialItems =
-    course.chapters.map((chapter) => ({
+    course.chapters.map((chapter: any) => ({
       id: chapter.id,
       title: chapter.title,
       order: chapter.position,
-      lessons: chapter.lessons.map((lesson) => ({
+      lessons: chapter.lessons.map((lesson: any) => ({
         id: lesson.id,
         title: lesson.title,
         order: lesson.position,
@@ -49,11 +49,11 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
 
   useEffect(() => {
     const updatedItems =
-      course.chapters.map((chapter) => ({
+      course.chapters.map((chapter: any) => ({
         id: chapter.id,
         title: chapter.title,
         order: chapter.position,
-        lessons: chapter.lessons.map((lesson) => ({
+        lessons: chapter.lessons.map((lesson: any) => ({
           id: lesson.id,
           title: lesson.title,
           order: lesson.position,
@@ -66,7 +66,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
   useEffect(() => {
     setOpenChapters((prev) => {
       const newSet = new Set(prev);
-      items.forEach((item) => newSet.add(item.id));
+      items.forEach((item: any) => newSet.add(item.id));
       return newSet;
     });
   }, []);
@@ -94,7 +94,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
 
       const newLocalSortedChapters = arrayMove(items, oldIndex, newIndex);
 
-      const updatedChaptersOrder = newLocalSortedChapters.map((chapter, index) => ({
+      const updatedChaptersOrder = newLocalSortedChapters.map((chapter: any, index: number) => ({
         ...chapter,
         order: index + 1,
       }));
@@ -103,7 +103,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
 
       setItems(updatedChaptersOrder);
 
-      const newChaptersActionData = updatedChaptersOrder.map((chapter) => ({ id: chapter.id, position: chapter.order }));
+      const newChaptersActionData = updatedChaptersOrder.map((chapter: any) => ({ id: chapter.id, position: chapter.order }));
 
       const reorderChaptersPrisma = () => reorderChaptersAction({ courseId: course.id, chapters: newChaptersActionData });
 
@@ -138,20 +138,20 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
 
       const newLessons = arrayMove(oldLessons, oldIndex, newIndex);
 
-      const newLessonsUpdatedOrder = newLessons.map((lesson, index) => ({
+      const newLessonsUpdatedOrder = newLessons.map((lesson: any, index: number) => ({
         ...lesson,
         order: index + 1,
       }));
 
       const newChapter = { ...chapter, lessons: newLessonsUpdatedOrder };
 
-      const newChaptersState = items.map((chapter) => (chapter.id === chapterId ? newChapter : chapter));
+      const newChaptersState = items.map((chapter: any) => (chapter.id === chapterId ? newChapter : chapter));
 
       const previousChapters = [...items];
 
       setItems(newChaptersState);
 
-      const newLessonsActionData = newLessons.map((lesson) => ({ id: lesson.id, position: lesson.order }));
+      const newLessonsActionData = newLessons.map((lesson: any) => ({ id: lesson.id, position: lesson.order }));
 
       const reorderLessonsPromise = () => reorderLessonsAction({ chapterId, courseId: course.id, lessons: newLessonsActionData });
 
@@ -193,7 +193,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
 
         <CardContent className="space-y-3 @max-xl:px-3">
           <SortableContext items={items} strategy={verticalListSortingStrategy}>
-            {items.map((chapter) => (
+            {items.map((chapter: any) => (
               <SortableItem key={chapter.id} id={chapter.id} data={{ type: "chapter" }}>
                 {(listeners) => (
                   <Card className="py-0">
@@ -218,7 +218,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
                       <CollapsibleContent>
                         <div>
                           <SortableContext items={chapter.lessons} strategy={verticalListSortingStrategy}>
-                            {chapter.lessons.map((lesson) => (
+                            {chapter.lessons.map((lesson: any) => (
                               <SortableItem key={lesson.id} id={lesson.id} data={{ type: "lesson", chapterId: chapter.id }}>
                                 {(listeners) => (
                                   <div className="flex items-center justify-between p-2 hover:bg-accent rounded-sm">

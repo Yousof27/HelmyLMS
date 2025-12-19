@@ -15,7 +15,7 @@ const RenderRoutes = ({ navigationItems }: RenderRoutesProps) => {
   const route = pathname.split("/")[1];
   return (
     <>
-      {navigationItems.map((item, index) => (
+      {navigationItems.map((item: any, index: number) => (
         <Link
           href={item.href}
           key={index}

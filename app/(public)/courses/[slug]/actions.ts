@@ -80,7 +80,7 @@ export async function enrollCourseAction(courseId: string): Promise<actionRespon
       });
     }
 
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       const existingEnrollment = await tx.enrollment.findUnique({
         where: {
           userId_courseId: {

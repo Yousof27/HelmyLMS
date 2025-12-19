@@ -21,7 +21,7 @@ export async function RenderCourses() {
   const courses = await getAllCourses();
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
-      {courses.map((course) => (
+      {courses.map((course: any) => (
         <PublicCourseCard key={course.id} course={course} />
       ))}
     </div>
@@ -31,7 +31,7 @@ export async function RenderCourses() {
 export function PublicCourseCardSkeletonLayout() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
-      {Array.from({ length: 4 }).map((_, index) => (
+      {Array.from({ length: 4 }).map((_, index: number) => (
         <PublicCourseCardSkeleton key={index} />
       ))}
     </div>

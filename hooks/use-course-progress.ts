@@ -8,8 +8,8 @@ export function useCourseProgress(chapters: CourseSidebarDataType["chapters"]) {
     let lessonsNumber = 0;
     let lessonsCompletedNumber = 0;
 
-    chapters.forEach((chapter) => {
-      chapter.lessons.forEach((lesson) => {
+    chapters.forEach((chapter: any) => {
+      chapter.lessons.forEach((lesson: any) => {
         lessonsNumber++;
         if (lesson.lessonProgress.length > 0) {
           lessonsCompletedNumber++;

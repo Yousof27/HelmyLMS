@@ -37,9 +37,9 @@ export async function adminGetEnrollmentStats() {
     });
   }
 
-  const dateMap = new Map(last30Days.map((day, i) => [day.date, i]));
+  const dateMap = new Map(last30Days.map((day: any, i: any) => [day.date, i]));
 
-  enrollments.forEach((enrollment) => {
+  enrollments.forEach((enrollment: any) => {
     const date = enrollment.createdAt.toISOString().split("T")[0];
     const index = dateMap.get(date);
 

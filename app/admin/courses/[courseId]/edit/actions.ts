@@ -51,7 +51,7 @@ export async function editCourseAction(data: courseSchemaType, courseId: string)
       };
     }
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       const slug = createSlug(course.title) === createSlug(data.title) ? course.slug : await generateUniqueCourseSlug(data.title);
 
       await tx.course.update({
@@ -89,7 +89,7 @@ export async function reorderLessonsAction({ chapterId, courseId, lessons }: Reo
       };
     }
 
-    const updates = lessons.map((lesson) =>
+    const updates = lessons.map((lesson: any) =>
       prisma.lesson.update({
         where: { id: lesson.id, chapterId: chapterId },
         data: {
@@ -130,7 +130,7 @@ export async function reorderChaptersAction({ courseId, chapters }: ReorderChapt
       };
     }
 
-    const updates = chapters.map((chapter) =>
+    const updates = chapters.map((chapter: any) =>
       prisma.chapter.update({
         where: { id: chapter.id, courseId: courseId },
         data: {
@@ -173,7 +173,7 @@ export async function createNewChapterAction({ name, courseId }: CreateNewChapte
       };
     }
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       const maxPosition = await tx.chapter.findFirst({
         where: { courseId: courseId },
         select: { position: true },
@@ -218,7 +218,7 @@ export async function createNewLessonAction({ name, courseId, chapterId }: Creat
       };
     }
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       const maxPosition = await tx.lesson.findFirst({
         where: { chapterId: chapterId },
         select: { position: true },
@@ -273,9 +273,9 @@ export async function deleteLessonAction({ lessonId, chapterId, courseId }: dele
       };
     }
 
-    const newLessons = lessons.filter((lesson) => lesson.id !== lessonId);
+    const newLessons = lessons.filter((lesson: any) => lesson.id !== lessonId);
 
-    const updates = newLessons.map((lesson, index) => {
+    const updates = newLessons.map((lesson: any, index: number) => {
       return prisma.lesson.update({
         where: { id: lesson.id },
         data: {
@@ -321,9 +321,9 @@ export async function deleteChapterAction({ chapterId, courseId }: deleteChapter
       };
     }
 
-    const newChapters = chapters.filter((chapter) => chapter.id !== chapterId);
+    const newChapters = chapters.filter((chapter: any) => chapter.id !== chapterId);
 
-    const updates = newChapters.map((chapter, index) => {
+    const updates = newChapters.map((chapter: any, index: number) => {
       return prisma.chapter.update({
         where: { id: chapter.id },
         data: {

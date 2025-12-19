@@ -37,7 +37,7 @@ const RenderCollapsibleChapters = ({ chapter, index, slug }: RenderCollapsibleCh
       </CollapsibleTrigger>
 
       <CollapsibleContent className="mt-3 pl-3 border-l-2 space-y-3">
-        {chapter.lessons.map((lesson) => (
+        {chapter.lessons.map((lesson: any) => (
           <LessonItem key={lesson.id} lesson={lesson} slug={slug} isActive={lesson.id === lessonId} />
         ))}
       </CollapsibleContent>

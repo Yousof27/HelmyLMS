@@ -26,7 +26,7 @@ const CourseSidebar = ({ course }: CourseSidebarProps) => {
       </div>
 
       <div className="py-4 @3xl:pr-4 space-y-3">
-        {course.chapters.map((chapter, index) => (
+        {course.chapters.map((chapter: any, index) => (
           <RenderCollapsibleChapters chapter={chapter} index={index} slug={course.slug} />
         ))}
       </div>

@@ -63,7 +63,7 @@ const CourseReviewPage = async ({ params }: CourseReviewPageProps) => {
           <div className="flex items-center justify-between max-sm:flex-col max-sm:items-start gap-2">
             <h2 className="text-xl lg:text-2xl font-semibold tracking-tight">Course Content</h2>
             <div className="text-sm">
-              {course.chapters.length} Chapters | {course.chapters.reduce((total, chapter) => total + chapter.lessons.length, 0) || 0} Lessons
+              {course.chapters.length} Chapters | {course.chapters.reduce((total: number, chapter: any) => total + chapter.lessons.length, 0) || 0} Lessons
             </div>
           </div>
 

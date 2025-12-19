@@ -23,7 +23,7 @@ const FormSelect = ({ form, name, label, FormItemCSS, selectContent, selectTrigg
             </SelectTrigger>
           </FormControl>
           <SelectContent>
-            {selectContent?.map((item) => (
+            {selectContent?.map((item: any) => (
               <SelectItem key={item} value={item}>
                 {item}
               </SelectItem>

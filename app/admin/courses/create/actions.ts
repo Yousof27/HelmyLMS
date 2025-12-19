@@ -41,7 +41,7 @@ export async function createCourseAction(data: courseSchemaType): Promise<action
       };
     }
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       const slug = await generateUniqueCourseSlug(validation.data.title);
 
       const stripeProduct = await stripe.products.create({

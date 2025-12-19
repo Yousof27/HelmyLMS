@@ -11,10 +11,6 @@
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,

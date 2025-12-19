@@ -16,7 +16,7 @@ const PaymentSuccessfulllPage = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-1 justify-center items-center">
-      <Card className="w-[350px] mx-4">
+      <Card className="w-87.5 mx-4">
         <CardContent>
           <div className="w-full flex justify-center">
             <CheckIcon className="size-12 p-2 bg-green-500/30 text-green-500 rounded-full" />

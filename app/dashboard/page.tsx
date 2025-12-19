@@ -68,7 +68,7 @@ export async function PublicCourseCardContent() {
   return (
     <div className={GRID_CSS}>
       {allCourses
-        .filter((course: any) => !enrolledCourses.some((enrolledCourse) => enrolledCourse.course.id === course.id))
+        .filter((course: any) => !enrolledCourses.some((enrolledCourse: any) => enrolledCourse.course.id === course.id))
         .map((course: any) => (
           <PublicCourseCard key={course.id} course={course} />
         ))}

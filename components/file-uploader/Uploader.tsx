@@ -211,9 +211,9 @@ const Uploader = ({ onChange, value, fileType }: UploaderProps) => {
 
   const onDropRejectedHandler = (fileRejection: FileRejection[]) => {
     if (fileRejection.length) {
-      const tooManyFiles = fileRejection.find((rejection) => rejection.errors[0].code === "too-many-files");
-      const invalidFileType = fileRejection.find((rejection) => rejection.errors[0].code === "file-invalid-type");
-      const tooBigFileSize = fileRejection.find((rejection) => rejection.errors[0].code === "file-too-large");
+      const tooManyFiles = fileRejection.find((rejection: any) => rejection.errors[0].code === "too-many-files");
+      const invalidFileType = fileRejection.find((rejection: any) => rejection.errors[0].code === "file-invalid-type");
+      const tooBigFileSize = fileRejection.find((rejection: any) => rejection.errors[0].code === "file-too-large");
 
       if (tooManyFiles) toast.error("Too many files selected, max is 1");
       if (invalidFileType) toast.error("Invalid file type, only accepted images");

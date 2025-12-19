@@ -130,7 +130,7 @@ const CourseStructure = ({ course }: CourseStructureProps) => {
         return;
       }
 
-      const chapter = items.find((chapter) => chapter.id === chapterId);
+      const chapter = items.find((chapter: any) => chapter.id === chapterId);
 
       if (!chapter) return;
 

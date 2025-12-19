@@ -45,7 +45,7 @@ const CollapsibleCourses = ({ course }: { course: PublicSingleCourseType }) => {
 
               <CollapsibleContent>
                 <div className="border-t bg-muted/20">
-                  {chapter.lessons.map((lesson, lessonIndex) => (
+                  {chapter.lessons.map((lesson: PublicSingleCourseType["chapters"][0]["lessons"][0], lessonIndex: number) => (
                     <div key={lesson.id} className="flex items-center gap-4 rounded-lg max-sm:py-3 max-sm:px-4 p-6 hover:bg-accent transition-colors">
                       <div className="flex max-sm:size-8 size-10 items-center justify-center rounded-full bg-background border-2 border-primary/20">
                         <IconPlayerPlay className="size-3 sm:size-4 text-muted-foreground group-hover:text-primary transition-colors" />

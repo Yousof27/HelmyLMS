@@ -8,7 +8,6 @@ import { stripe } from "@/lib/stripe";
 import { actionResponse } from "@/lib/types";
 import { courseSchema, courseSchemaType } from "@/lib/zodSchemas";
 import { request } from "@arcjet/next";
-import { CourseLevels, CourseStatus } from "@prisma/client";
 
 const aj = arcjet.withRule(
   fixedWindow({
@@ -56,8 +55,6 @@ export async function createCourseAction(data: courseSchemaType): Promise<action
       await tx.course.create({
         data: {
           ...validation.data,
-          level: validation.data.level as CourseLevels,
-          status: validation.data.status as CourseStatus,
           slug,
           userId: session.user.id as string,
           stripePriceId: stripeProduct.default_price as string,

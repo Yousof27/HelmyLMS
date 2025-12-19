@@ -7,7 +7,6 @@ import { createSlug, generateUniqueCourseSlug } from "@/lib/slug";
 import { actionResponse } from "@/lib/types";
 import { chapterSchema, courseSchema, courseSchemaType, lessonSchema } from "@/lib/zodSchemas";
 import { request } from "@arcjet/next";
-import { CourseLevels, CourseStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 const aj = arcjet.withRule(
@@ -56,7 +55,7 @@ export async function editCourseAction(data: courseSchemaType, courseId: string)
 
       await tx.course.update({
         where: { id: courseId },
-        data: { ...validation.data, level: validation.data.level as CourseLevels, status: validation.data.status as CourseStatus, slug },
+        data: { ...validation.data, slug },
       });
     });
 

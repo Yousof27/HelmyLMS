@@ -73,7 +73,7 @@ A modern, full-featured Learning Management System (LMS) built with Next.js, des
 1. **Clone the repository:**
 
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/Yousof27/HelmyLMS.git>
    cd HelmyLMS
    ```
 

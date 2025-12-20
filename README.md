@@ -73,7 +73,7 @@ A modern, full-featured Learning Management System (LMS) built with Next.js, des
 1. **Clone the repository:**
 
    ```bash
-   git clone <https://github.com/Yousof27/HelmyLMS.git>
+   git clone https://github.com/Yousof27/HelmyLMS.git
    cd HelmyLMS
    ```
 
@@ -97,8 +97,6 @@ A modern, full-featured Learning Management System (LMS) built with Next.js, des
    AWS_ACCESS_KEY_ID=your-tigris-access-key-id
    AWS_SECRET_ACCESS_KEY=your-tigris-secret-access-key
    AWS_ENDPOINT_URL_S3=your-tigris-s3-endpoint-url
-   AWS_ENDPOINT_URL_IAM=your-tigris-iam-endpoint-url
-   AWS_REGION=your-tigris-region
    NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES=your-tigris-bucket-name
    STRIPE_SECRET_KEY=your-stripe-secret-key
    STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret

@@ -8,7 +8,6 @@ export const env = createEnv({
     BETTER_AUTH_URL: z.string().url(),
     AUTH_GITHUB_CLIENT_ID: z.string().min(1),
     AUTH_GITHUB_CLIENT_SECRET: z.string().min(1),
-    RESEND_API_KEY: z.string().min(1),
     ARCJET_KEY: z.string().min(1),
 
     S3_ACCESS_KEY_ID: z.string().min(1),
@@ -19,6 +18,9 @@ export const env = createEnv({
 
     STRIPE_SECRET_KEY: z.string().min(1),
     STRIPE_WEBHOOK_SECRET: z.string().min(1),
+
+    BREVO_SMTP_USER: z.string().min(1),
+    BREVO_SMTP_PASSWORD: z.string().min(1),
   },
 
   client: {

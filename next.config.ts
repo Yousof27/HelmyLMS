@@ -7,10 +7,13 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
         hostname: "helmy-lms.t3.storage.dev",
         port: "",
-        protocol: "https",
+        pathname: "/**",
       },
     ],
   },
 };
+
+export default nextConfig;

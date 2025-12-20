@@ -28,7 +28,7 @@ A modern, full-featured Learning Management System (LMS) built with Next.js, des
 
 ## Live Demo
 
-🚀 [View Live Demo](https://helmy-lms.netlify.app)
+🚀 [View Live Demo](https://helmylms.netlify.app)
 
 ## Features
 

@@ -12,7 +12,6 @@ const aj = arcjet({
         "CATEGORY:SEARCH_ENGINE",
         "CATEGORY:MONITOR", // Uptime monitoring services
         "CATEGORY:PREVIEW", // Link previews e.g. Slack, Discord
-        "STRIPE_WEBHOOK",
       ],
     }),
   ],
@@ -28,10 +27,6 @@ async function authMiddleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/auth).*)"],
-};
-
 export default createMiddleware(aj, async (request: NextRequest) => {
   if (request.nextUrl.pathname.startsWith("/admin")) {
     return authMiddleware(request);
@@ -39,3 +34,7 @@ export default createMiddleware(aj, async (request: NextRequest) => {
 
   return NextResponse.next();
 });
+
+export const config = {
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/auth|api/webhook/stripe).*)"],
+};

@@ -43,8 +43,8 @@ const LessonContent = ({ slug, lesson }: LessonContentProps) => {
     <div className="flex flex-col h-full bg-background @3xl:pl-6">
       <VideoPlayer thumbnailKey={lesson.thumbnailKey ?? ""} videoKey={lesson.videoKey ?? ""} />
 
-      <div className="py-4 border-b flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">{lesson.title}</h1>
+      <div className="py-4 border-b flex flex-col items-start justify-between gap-4 @xl:flex-row @3xl:flex-col @3xl:items-start @4xl:flex-row">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">{lesson.title}</h1>
         {lesson.lessonProgress.length > 0 ? (
           <Button variant={"outline"} className="bg-green-500/10 text-green-500 hover:text-green-500" disabled={true}>
             <CheckCircle className="size-4 text-green-500" />
@@ -59,7 +59,7 @@ const LessonContent = ({ slug, lesson }: LessonContentProps) => {
       </div>
 
       <div className="space-y-3 py-4">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Description:</h1>
+        <h1 className="text-xl font-bold tracking-tight text-foreground">Description:</h1>
         {lesson.description ? <RenderDescription json={JSON.parse(lesson.description)} /> : <p>This lesson does not have a description yet</p>}
       </div>
     </div>

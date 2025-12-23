@@ -28,7 +28,7 @@ const RenderCollapsibleChapters = ({ chapter, index, slug }: RenderCollapsibleCh
           </div>
 
           <div className="flex-1 text-left min-w-0">
-            <p className="font-semibold text-sm truncate text-foreground">
+            <p className="font-semibold text-sm truncate text-foreground text-wrap line-clamp-2">
               {chapter.position}: {chapter.title}
             </p>
             <p className="text-xs text-muted-foreground font-medium truncate">{chapter.lessons.length} Lessons</p>

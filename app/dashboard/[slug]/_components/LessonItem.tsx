@@ -50,9 +50,9 @@ const LessonItem = ({ isActive, lesson, slug }: LessonItemProps) => {
           )}
         </div>
 
-        <div className="flex-1 flex items-center justify-between">
+        <div className="flex-1 flex items-center justify-between gap-4">
           <p
-            className={`text-xs font-medium truncate ${
+            className={`text-xs font-medium truncate text-wrap line-clamp-2 ${
               lessonCompleted ? "text-green-800 dark:text-green-200" : isActive ? "text-primary font-semibold" : "text-foreground"
             }`}
           >
